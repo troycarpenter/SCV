@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.0](https://github.com/dccakes/SCV/compare/oswp-v0.4.0...oswp-v0.5.0) (2026-11-10)
+
+
+### Features
+
+* **guest-list:** export guests, RSVPs and dietary answers as CSV; start Etta closed on phones ([#311](https://github.com/dccakes/SCV/issues/311)) ([e01d38e](https://github.com/dccakes/SCV/commit/e01d38e9b424ed045fe4543b998dcd4283d00ce6))
+
+
+### Bug Fixes
+
+* **auth:** upgrade better-auth to 1.6 and unblock /join self-registration ([#313](https://github.com/dccakes/SCV/issues/313)) ([3647b6d](https://github.com/dccakes/SCV/commit/3647b6d53ebabd029459a0ac986d39615f4c0a6b))
+
 ## [0.4.0](https://github.com/dccakes/SCV/compare/oswp-v0.3.0...oswp-v0.4.0) (2026-11-05)
 
 
