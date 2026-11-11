@@ -22,6 +22,8 @@ const PUBLIC_PREFIXES = ['/auth', '/api/auth', '/join', '/blog', '/api/webhooks'
 const PUBLIC_TRPC_PROCEDURES = new Set([
   'household.findBySearchPublic',
   'website.submitPublicRsvpForm',
+  'selfFill.getByToken',
+  'selfFill.registerGuest',
 ])
 
 const TRPC_PREFIX = '/api/trpc/'

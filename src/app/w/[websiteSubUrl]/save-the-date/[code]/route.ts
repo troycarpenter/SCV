@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { householdInviteCookieName, householdInviteCookiePath } from '~/lib/website/cookies'
 import { householdInviteService } from '~/server/application/household-invite'
+import { getPublicWebsiteBaseUrl } from '~/lib/website/public-url'
 
 type HouseholdInviteCodeRouteProps = {
   params: Promise<{
@@ -17,7 +18,7 @@ export async function GET(request: Request, { params }: HouseholdInviteCodeRoute
   const { websiteSubUrl, code } = await params
   const inviteData = await householdInviteService.getInviteData(websiteSubUrl, code)
 
-  const redirectUrl = new URL(`/w/${websiteSubUrl}/save-the-date`, request.url)
+  const redirectUrl = new URL(`/w/${websiteSubUrl}/save-the-date`, getPublicWebsiteBaseUrl())
   const response = NextResponse.redirect(redirectUrl)
   response.headers.set('X-Robots-Tag', 'noindex, nofollow')
 

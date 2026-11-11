@@ -8,6 +8,19 @@ function formatDateStandard(date: Date | null | undefined) {
   })
 }
 
+// format: 1:30 PM
+function formatTime12Hour(time: string): string {
+  const match = time.match(/^(\d{1,2}):(\d{2})$/)
+  if (!match) return time
+
+  const hour = Number(match[1])
+  const minute = match[2]
+  const period = hour >= 12 ? 'PM' : 'AM'
+  const displayHour = hour % 12 || 12
+
+  return `${displayHour}:${minute} ${period}`
+}
+
 // format: 01.24.2024
 function formatDateNumber(date: Date | null | undefined) {
   if (!date) return
@@ -155,4 +168,5 @@ export {
   formatDateStandard,
   generateRandomColor,
   generateTimes,
+  formatTime12Hour,
 }

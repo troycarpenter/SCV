@@ -60,7 +60,7 @@ function EventCardBase({
             {event.date && (
               <CardDescription className='mt-1.5 flex items-center gap-1.5'>
                 <Calendar className='h-3.5 w-3.5 shrink-0' />
-                <span className='text-xs md:text-sm'>{format(new Date(event.date), 'PPP')}</span>
+                <span className='text-xs md:text-sm'>{format(new Date(event.date.getUTCFullYear(), event.date.getUTCMonth(), event.date.getUTCDate()), 'PPP')}</span>
               </CardDescription>
             )}
           </div>

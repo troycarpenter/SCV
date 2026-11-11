@@ -59,7 +59,7 @@ export default function WeddingSettingsForm({ initialData }: WeddingSettingsForm
     },
   })
 
-  const parsedCeremonyDate = initialData.weddingDate ? new Date(initialData.weddingDate) : null
+  const parsedCeremonyDate = initialData.weddingDate ? new Date(`${initialData.weddingDate.slice(0, 10)}T00:00:00`) : null
   const ceremonyDateLabel =
     parsedCeremonyDate && !Number.isNaN(parsedCeremonyDate.valueOf())
       ? parsedCeremonyDate.toLocaleDateString('en-US', {

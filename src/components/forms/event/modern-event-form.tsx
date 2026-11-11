@@ -36,6 +36,23 @@ import { Textarea } from '~/components/ui/textarea'
 import { cn } from '~/lib/utils'
 import type { Event } from '~/server/domains/event/event.types'
 
+function getEventDateValue(date: Date | string | null | undefined): string {
+  if (!date) return ''
+  return typeof date === 'string' ? date.slice(0, 10) : date.toISOString().slice(0, 10)
+}
+
+function getLocalDate(dateValue: string): Date | undefined {
+  if (!dateValue) return undefined
+
+  const [year, month, day] = dateValue.split('-').map(Number)
+
+  if (year === undefined || month === undefined || day === undefined) {
+    return undefined
+  }
+
+  return new Date(year, month - 1, day)
+}
+
 type ModernEventFormBaseProps = Readonly<{
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -69,7 +86,7 @@ export function ModernEventForm({
     defaultValues: isEditMode
       ? {
           eventName: event.name,
-          date: event.date ? format(new Date(event.date), 'yyyy-MM-dd') : '',
+          date: getEventDateValue(event.date),
           startTime: event.startTime ?? '',
           endTime: event.endTime ?? '',
           venue: event.venue ?? '',
@@ -99,7 +116,7 @@ export function ModernEventForm({
         isEditMode
           ? {
               eventName: event.name,
-              date: event.date ? format(new Date(event.date), 'yyyy-MM-dd') : '',
+              date: getEventDateValue(event.date),
               startTime: event.startTime ?? '',
               endTime: event.endTime ?? '',
               venue: event.venue ?? '',
@@ -114,7 +131,7 @@ export function ModernEventForm({
   }, [open, event, form, isEditMode])
 
   // Parse date string to Date object for calendar
-  const selectedDate = dateValue ? new Date(dateValue) : undefined
+  const selectedDate = getLocalDate(dateValue ?? '')
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

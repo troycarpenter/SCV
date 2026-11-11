@@ -90,7 +90,7 @@ export function flightDates(events: VoyageEvent[]) {
   }
 }
 export function coupleIdentity(wedding: WeddingPageData) {
-  const names = [wedding.brideFirstName, wedding.groomFirstName].filter(
+  const names = [wedding.groomFirstName, wedding.brideFirstName].filter(
     (name): name is string => !!name
   )
   return {

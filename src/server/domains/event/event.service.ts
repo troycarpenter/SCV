@@ -68,7 +68,7 @@ export class EventService {
         data: {
           name,
           weddingId,
-          date: date ? new Date(date) : undefined,
+          date: data.date ? new Date(`${data.date.slice(0, 10)}T00:00:00.000Z`) : undefined,
           startTime,
           endTime,
           venue,
@@ -194,7 +194,7 @@ export class EventService {
         where: { id: data.eventId },
         data: {
           name: data.eventName,
-          date: data.date ? new Date(data.date) : undefined,
+          date: data.date ? new Date(`${data.date.slice(0, 10)}T00:00:00.000Z`) : undefined,
           startTime: data.startTime,
           endTime: data.endTime,
           venue: data.venue,

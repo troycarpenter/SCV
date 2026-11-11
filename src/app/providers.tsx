@@ -48,15 +48,27 @@ export function Providers({
       <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
         <AuthUIProvider
           authClient={authClient}
-          navigate={(path) => router.push(withRedirectTo(path))}
+
+          navigate={(path) => {
+            // Better Auth UI sends unverified signups to sign-in because no session token exists.
+            // Route that specific signup outcome to our custom email verification form.
+            if (path.startsWith('/auth/sign-in') && !path.includes('notice=')) {
+              const search = window.location.search
+              router.push(`${EMAIL_VERIFICATION_PATH}${search}`)
+              return
+            }
+
+            router.push(withRedirectTo(path))
+          }}
           replace={(path) => router.replace(path)}
+
           onSessionChange={() => {
             router.refresh()
           }}
           Link={Link}
           emailOTP
           signUp={signupsEnabled}
-          emailVerification={{ otp: true }}
+          emailVerification={true}
           organization={{
             customRoles: authUiCustomOrganizationRoles,
           }}

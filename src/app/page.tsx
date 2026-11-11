@@ -137,18 +137,18 @@ export default async function Home() {
     headers: await headers(),
   })
 
-  let isSignedIn = !!session
-  if (session?.user?.id) {
-    const scope = await resolveWorkspaceScope({
-      session,
-      userId: session.user.id,
-    })
+let isSignedIn = !!session
+if (session?.user?.id) {
+  const scope = await resolveWorkspaceScope({ session, userId: session.user.id })
+  const capabilities = readWorkspaceCapabilities(scope.activeOrganization?.role)
 
-    const capabilities = readWorkspaceCapabilities(scope.activeOrganization?.role)
-    if (!capabilities.canViewPlanning) {
-      isSignedIn = false
-    }
+  // A signed-in user without a wedding must be allowed to complete setup.
+  // Users with an existing workspace still need planning permission.
+  if (scope.activeWeddingId && !capabilities.canViewPlanning) {
+    isSignedIn = false
   }
+}
+
 
   return (
     <>

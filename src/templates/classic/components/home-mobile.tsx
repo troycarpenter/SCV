@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { formatDateStandard } from '~/app/utils/helpers'
+import { formatDateStandard, formatTime12Hour } from '~/app/utils/helpers'
 import { ClassicCoupleGallery, ClassicHeaderImage } from '~/templates/classic/components/media'
 import { ClassicNavbar } from '~/templates/classic/components/navbar'
 import { ClassicSections } from '~/templates/classic/components/sections'
@@ -18,7 +18,7 @@ export function ClassicHomeMobile({
       <ClassicHeaderImage url={website.headerImageUrl} />
       <div className='text-center'>
         <h1 className='my-5 font-medium text-6xl tracking-widest'>
-          {weddingData.brideFirstName} & {weddingData.groomFirstName}
+          {weddingData.groomFirstName} & {weddingData.brideFirstName}
         </h1>
         <p className='text-lg'>{weddingData.date?.standardFormat ?? 'Date To Be Announced'}</p>
         {weddingData.daysRemaining > 0 && (
@@ -61,10 +61,11 @@ export function ClassicHomeMobile({
           {!!event.date && (
             <span className='font-thin text-2xl'>{formatDateStandard(event.date)}</span>
           )}
+
           {!!event.startTime && (
             <span className='font-thin text-2xl'>
-              {event.startTime}
-              {!!event.endTime && ` - ${event.endTime}`}
+              {formatTime12Hour(event.startTime)}
+              {!!event.endTime && ` - ${formatTime12Hour(event.endTime)}`}
             </span>
           )}
         </div>
@@ -76,7 +77,7 @@ export function ClassicHomeMobile({
 
       <div className='text-center'>
         <h2 className='border-black border-b px-5 pb-6 text-6xl'>
-          {weddingData.brideFirstName?.[0] ?? 'B'} & {weddingData.groomFirstName?.[0] ?? 'G'}
+          {weddingData.groomFirstName?.[0] ?? 'G'} & {weddingData.brideFirstName?.[0] ?? 'B'}
         </h2>
         <p className='mt-4 text-lg tracking-widest'>
           {weddingData.date.numberFormat?.toString() ?? 'Date To Be Announced'}

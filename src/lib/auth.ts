@@ -36,7 +36,7 @@ type EmailOtpApi = {
   }) => Promise<unknown>
 }
 
-const appBaseUrl = env.NEXT_PUBLIC_APP_URL ?? `http://localhost:${env.PORT ?? '3000'}`
+const appBaseUrl = env.BETTER_AUTH_URL ?? env.NEXT_PUBLIC_APP_URL ?? `http://localhost:${env.PORT ?? '3000'}`
 const localTrustedHostnames = new Set(['127.0.0.1', '::1', 'localhost'])
 const staticTrustedOrigins = [
   'https://oswp.carvallo.io',
@@ -141,6 +141,11 @@ export const auth = betterAuth({
   baseURL: appBaseUrl,
   secret: env.BETTER_AUTH_SECRET,
   trustedOrigins: (request) => resolveTrustedOrigins(request?.url),
+  onAPIError: {
+    onError: (error) => {
+      console.error('[Better Auth API error]', error)
+    },
+  },
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),

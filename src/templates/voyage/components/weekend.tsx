@@ -10,6 +10,7 @@ import {
 } from '~/templates/voyage/components/primitives'
 import { Band, LinkifiedBlurb } from '~/templates/voyage/components/sections'
 import { eventDate, orderedEvents, type VoyageEvent } from '~/templates/voyage/site'
+import { formatTime12Hour } from '~/app/utils/helpers'
 
 export function VoyageWeekend({
   events,
@@ -60,8 +61,9 @@ export function VoyageWeekend({
                   )}
                 </p>
                 <p className={`${headingFont} text-2xl`}>
+
                   {event.startTime
-                    ? `${event.startTime}${event.endTime ? `–${event.endTime}` : ''}`
+                    ? `${formatTime12Hour(event.startTime)}${event.endTime ? `–${formatTime12Hour(event.endTime)}` : ''}`
                     : 'Time to be announced'}
                 </p>
               </div>

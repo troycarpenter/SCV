@@ -239,6 +239,7 @@ export class DashboardService {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
+          timeZone: 'UTC',
         }),
         numberFormat: formatDateNumber(weddingDate),
       },

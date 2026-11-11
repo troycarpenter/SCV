@@ -9,6 +9,8 @@ import type { Prisma, PrismaClient } from '@prisma/client'
 
 import type { Wedding } from '~/server/domains/wedding/wedding.types'
 
+import { randomUUID } from 'node:crypto'
+
 export class WeddingRepository {
   constructor(private db: PrismaClient | Prisma.TransactionClient) {}
 
@@ -44,7 +46,7 @@ export class WeddingRepository {
   }
 
   /**
-   * Create a new wedding and associate it with a user
+   * Create a wedding, its organization, and associate the owner.
    */
   async create(data: {
     userId: string
@@ -54,14 +56,32 @@ export class WeddingRepository {
     brideLastName: string
     enabledAddOns?: string[]
   }): Promise<Wedding> {
-    // Create wedding and UserWedding join entry in a single transaction
+    const weddingId = randomUUID()
+
     return this.db.wedding.create({
       data: {
+        id: weddingId,
         groomFirstName: data.groomFirstName,
         groomLastName: data.groomLastName,
         brideFirstName: data.brideFirstName,
         brideLastName: data.brideLastName,
         enabledAddOns: data.enabledAddOns ?? [],
+        organization: {
+          create: {
+            id: randomUUID(),
+            name: `${data.groomFirstName} & ${data.brideFirstName}`,
+            slug: `wedding-${weddingId}`,
+            members: {
+              create: {
+                id: randomUUID(),
+                role: 'owner',
+                user: {
+                  connect: { id: data.userId },
+                },
+              },
+            },
+          },
+        },
         userWeddings: {
           create: {
             userId: data.userId,

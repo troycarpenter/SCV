@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { AuthView } from '@daveyplate/better-auth-ui'
 import { redirect } from 'next/navigation'
 
@@ -35,6 +36,7 @@ export default async function AuthPage({
   const showDemoAccounts = process.env.NODE_ENV !== 'production'
   const showSignupsClosedNotice =
     isSignInPath && resolvedSearchParams.notice === SIGNUPS_CLOSED_NOTICE
+  const showVerifiedNotice = isSignInPath && resolvedSearchParams.notice === 'verified'
 
   return (
     <main className='flex min-h-screen items-center justify-center bg-background px-4 py-8'>
@@ -53,6 +55,27 @@ export default async function AuthPage({
         <OtpSubmitGuard>
           <AuthView path={path} />
         </OtpSubmitGuard>
+
+        {isSignInPath ? (
+          <p className="w-full max-w-sm text-center text-sm text-muted-foreground">
+            Need to verify your email?{' '}
+            <Link
+              href="/auth/email-verification"
+              className="text-primary underline underline-offset-4"
+            >
+              Enter verification code
+            </Link>
+          </p>
+        ) : null}
+
+        {showVerifiedNotice ? (
+          <p
+            role="status"
+            className="w-full max-w-sm rounded-2xl border border-border bg-card p-4 text-card-foreground text-sm"
+          >
+            Your email has been verified. You can sign in now.
+          </p>
+        ) : null}
 
         {isSignInPath && showDemoAccounts ? (
           <section className='rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-sm'>

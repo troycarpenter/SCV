@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { formatDateStandard } from '~/app/utils/helpers'
+import { formatDateStandard, formatTime12Hour } from '~/app/utils/helpers'
 import { AureliaCoupleGallery, AureliaHeaderImage } from '~/templates/aurelia/components/media'
 import { AureliaNavbar } from '~/templates/aurelia/components/navbar'
 import { AureliaSections } from '~/templates/aurelia/components/sections'
@@ -27,9 +27,9 @@ export function AureliaHome({ weddingData, path, introText }: Readonly<TemplateS
           We're getting married
         </p>
         <h1 className={`${headingFont} text-6xl text-foreground italic leading-tight sm:text-7xl`}>
-          {weddingData.brideFirstName}
-          <span className='mx-3 font-light text-primary not-italic'>&</span>
           {weddingData.groomFirstName}
+          <span className='mx-3 font-light text-primary not-italic'>&</span>
+          {weddingData.brideFirstName}
         </h1>
         <div className='flex items-center gap-4 text-muted-foreground'>
           <span className='h-px w-12 bg-border' />
@@ -88,10 +88,11 @@ export function AureliaHome({ weddingData, path, introText }: Readonly<TemplateS
                   {formatDateStandard(event.date)}
                 </span>
               )}
+
               {!!event.startTime && (
                 <span className='text-muted-foreground text-sm'>
-                  {event.startTime}
-                  {!!event.endTime && ` – ${event.endTime}`}
+                  {formatTime12Hour(event.startTime)}
+                  {!!event.endTime && ` – ${formatTime12Hour(event.endTime)}`}
                 </span>
               )}
               {!!event.venue && (
@@ -108,7 +109,7 @@ export function AureliaHome({ weddingData, path, introText }: Readonly<TemplateS
 
       <section className='flex flex-col items-center gap-3 text-center'>
         <p className={`${headingFont} text-5xl text-foreground italic`}>
-          {weddingData.brideFirstName?.[0] ?? 'B'} &amp; {weddingData.groomFirstName?.[0] ?? 'G'}
+          {weddingData.groomFirstName?.[0] ?? 'G'} &amp; {weddingData.brideFirstName?.[0] ?? 'B'}
         </p>
         <span className='h-px w-16 bg-border' />
         <p className='text-muted-foreground text-sm tracking-[0.3em]'>

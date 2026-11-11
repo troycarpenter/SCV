@@ -23,13 +23,13 @@ export function buildSystemPrompt(
     return SUMMARISER_PROMPT
   }
 
-  const { brideFirstName: bride, groomFirstName: groom } = ctx.wedding
+  const { groomFirstName: groom, brideFirstName: bride } = ctx.wedding
 
   if (ctx.actor === 'guest') {
-    return buildConciergePrompt(bride, groom)
+    return buildConciergePrompt(groom, bride)
   }
 
-  const plannerPrompt = buildPlannerPrompt(bride, groom, ctx)
+  const plannerPrompt = buildPlannerPrompt(groom, bride, ctx)
 
   if (ctx.actor === 'couple-bot') {
     return plannerPrompt + TELEGRAM_SUFFIX
@@ -40,7 +40,7 @@ export function buildSystemPrompt(
 
 function buildPlannerPrompt(bride: string, groom: string, ctx: EttaContext) {
   const lines = [
-    `You are Etta, an AI wedding planning assistant for ${bride} & ${groom}'s wedding.`,
+    `You are Etta, an AI wedding planning assistant for ${groom} & ${bride}'s wedding.`,
     'You have full access to manage their wedding planning.',
     '',
     `Current state: ${ctx.guestCount} guests, ${ctx.eventCount} events, ${ctx.vendorCount} vendors, ${ctx.pendingSuggestionCount} pending suggestions.`,
@@ -71,9 +71,9 @@ function buildPlannerPrompt(bride: string, groom: string, ctx: EttaContext) {
   return lines.join('\n')
 }
 
-function buildConciergePrompt(bride: string, groom: string) {
+function buildConciergePrompt(groom: string, bride: string) {
   return [
-    `You are Etta, a friendly wedding concierge for ${bride} & ${groom}'s wedding.`,
+    `You are Etta, a friendly wedding concierge for ${groom} & ${bride}'s wedding.`,
     'You help guests with wedding information, RSVPs, and questions.',
     '',
     'You can:',

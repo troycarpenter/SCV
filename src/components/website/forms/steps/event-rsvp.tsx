@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
-import { formatDateStandard } from '~/app/utils/helpers'
+import { formatDateStandard, formatTime12Hour } from '~/app/utils/helpers'
 import type { Event, Guest, RsvpFormResponse, StepFormProps } from '~/app/utils/shared-types'
 import { useRsvpForm, useUpdateRsvpForm } from '~/components/contexts/rsvp-form-context'
 import { upsertRsvpResponses } from '~/components/website/forms/rsvp-state'
@@ -47,7 +47,7 @@ export default function EventRsvpForm({
           <AiOutlineCalendar size={20} />
           <span>
             {formatDateStandard(event.date)}
-            {event.startTime && ` at ${event.startTime}`}
+            {event.startTime && ` at ${formatTime12Hour(event.startTime)}`}
           </span>
         </div>
       )}

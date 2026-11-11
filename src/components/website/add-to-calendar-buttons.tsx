@@ -48,8 +48,11 @@ export function AddToCalendarButtons({
       </Button>
       <Button type='button' variant='outline' size='sm' onClick={downloadIcs}>
         <CalendarPlus />
-        Apple Calendar
+        Download .ics File
       </Button>
+      <p className="w-full text-center text-sm text-muted-foreground">
+        Download the .ics file to add the wedding to Apple Calendar or another calendar app.
+      </p>
     </div>
   )
 }

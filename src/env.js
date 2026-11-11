@@ -23,6 +23,7 @@ export const env = createEnv({
     // "true". Only the exact strings "true" and "false" are accepted so a typo such as "0" or
     // "False" fails loudly at boot. (If validation is skipped, src/lib/signups.ts treats any
     // value other than "true" as closed.)
+    BETTER_AUTH_URL: z.string().url().optional(),
     ALLOW_SIGNUPS: z.enum(['true', 'false']).default('true'),
     // Optional: AWS S3 Storage (can be disabled for local dev)
     AWS_S3_BUCKET_NAME: z.string().min(1).optional(),
@@ -109,6 +110,7 @@ export const env = createEnv({
     DIRECT_URL: process.env.DIRECT_URL,
     NODE_ENV: process.env.NODE_ENV,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     ALLOW_SIGNUPS: process.env.ALLOW_SIGNUPS,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     AWS_S3_BUCKET_NAME: process.env.AWS_S3_BUCKET_NAME,

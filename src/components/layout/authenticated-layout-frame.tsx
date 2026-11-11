@@ -42,13 +42,14 @@ export async function AuthenticatedLayoutFrame(props: Readonly<AuthenticatedLayo
     const brideFirstName = details?.brideFirstName?.trim() ?? ''
     const groomFirstName = details?.groomFirstName?.trim() ?? ''
     coupleName =
-      brideFirstName && groomFirstName ? `${brideFirstName} & ${groomFirstName}` : undefined
+      groomFirstName && brideFirstName ? `${groomFirstName} & ${brideFirstName}` : undefined
     weddingDate = details?.weddingDate
       ? new Date(details.weddingDate).toLocaleDateString('en-us', {
           weekday: 'long',
           year: 'numeric',
           month: 'short',
           day: 'numeric',
+          timeZone: 'UTC',
         })
       : undefined
     weddingLocation = details?.weddingLocation?.trim() || undefined

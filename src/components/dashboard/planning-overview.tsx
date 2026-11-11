@@ -86,7 +86,7 @@ function TodayHero({ dashboardData }: { dashboardData: DashboardData | null }) {
   const weddingData = dashboardData?.weddingData
   const bride = weddingData?.brideFirstName ?? ''
   const groom = weddingData?.groomFirstName ?? ''
-  const coupleName = bride && groom ? `${bride} & ${groom}` : bride || groom || 'Your Wedding'
+  const coupleName = groom && bride ? `${groom} & ${bride}` : groom || bride || 'Your Wedding'
   const hasDate = weddingData?.daysRemaining != null && weddingData.daysRemaining >= 0
   const dateLabel = weddingData?.date?.standardFormat ?? ''
   const location = weddingData?.location ?? ''

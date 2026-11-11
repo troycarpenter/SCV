@@ -19,10 +19,10 @@ export default async function Icon({ params }: IconRouteProps) {
   const color = '#ffffff'
 
   if (loadResult.status === 'ready') {
-    const { brideFirstName, groomFirstName, website } = loadResult.weddingData
+    const { groomFirstName, brideFirstName, website } = loadResult.weddingData
     const brideInitial = brideFirstName?.[0] ?? ''
     const groomInitial = groomFirstName?.[0] ?? ''
-    initials = `${brideInitial}${groomInitial}`.toUpperCase() || 'W'
+    initials = `${groomInitial}${brideInitial}`.toUpperCase() || 'W'
 
     const template =
       TEMPLATE_CATALOG.find((meta) => meta.id === website.templateId) ?? TEMPLATE_CATALOG[0]

@@ -215,7 +215,7 @@ export class WebsiteManagementService {
         message: 'Failed to fetch wedding data.',
       })
     }
-    const weddingDate = events.find((event) => event.name === 'Wedding Day')?.date
+    const weddingDate = events[0]?.date
     const homeSection = sections.find((section) => section.type === WebsiteSectionType.HOME)
     const homeContent =
       homeSection?.isEnabled && homeSection.type === WebsiteSectionType.HOME
