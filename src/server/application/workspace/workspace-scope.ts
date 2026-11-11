@@ -1,3 +1,4 @@
+
 import type { ActiveOrganization } from '~/server/authz/authorization.types'
 import { WorkspaceScopeRepository } from '~/server/authz/workspace-scope.repository'
 import { WorkspaceScopeService } from '~/server/authz/workspace-scope.service'
@@ -22,7 +23,9 @@ const getSessionToken = (session: unknown): string | null => {
   }
 
   const sessionToken = sessionRecord.token
-  return typeof sessionToken === 'string' && sessionToken.length > 0 ? sessionToken : null
+  return typeof sessionToken === 'string' && sessionToken.length > 0
+    ? sessionToken
+    : null
 }
 
 export const getSessionActiveOrganizationId = (session: unknown): string | null => {
@@ -65,12 +68,26 @@ export async function resolveWorkspaceScope(input: {
   userId: string
 }): Promise<WorkspaceScope> {
   const { session, userId } = input
-  const sessionActiveOrganizationId = getSessionActiveOrganizationId(session)
-  const sessionToken = getSessionToken(session)
 
   return workspaceScopeService.resolve({
     userId,
-    sessionToken,
-    sessionActiveOrganizationId,
+    sessionToken: getSessionToken(session),
+    sessionActiveOrganizationId: getSessionActiveOrganizationId(session),
+  })
+}
+
+export async function listMyWorkspaces(userId: string) {
+  return workspaceScopeService.listMyWorkspaces(userId)
+}
+
+export async function switchWorkspace(input: {
+  session: unknown
+  userId: string
+  organizationId: string
+}) {
+  return workspaceScopeService.switchWorkspace({
+    userId: input.userId,
+    sessionToken: getSessionToken(input.session),
+    organizationId: input.organizationId,
   })
 }

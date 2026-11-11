@@ -1,3 +1,4 @@
+
 import type { ActiveOrganization } from '~/server/authz/authorization.types'
 
 export type WorkspaceScopeRow = {
@@ -36,12 +37,31 @@ function findPrimaryScope(candidateScopes: WorkspaceScopeRow[]): WorkspaceScopeR
   return candidateScopes.find((scope) => scope.isPrimaryWedding && hasLinkedWedding(scope))
 }
 
+function findPreferredScope(
+  candidateScopes: WorkspaceScopeRow[],
+  organizationId: string | null
+): WorkspaceScopeRow | undefined {
+  if (!organizationId) {
+    return undefined
+  }
+
+  return candidateScopes.find(
+    (scope) => scope.organizationId === organizationId && hasLinkedWedding(scope)
+  )
+}
+
 export function decideWorkspaceScope(input: {
   sessionActiveOrganizationId: string | null
+  lastActiveOrganizationId: string | null
   scopedSessionRow?: WorkspaceScopeRow
   candidateScopes: WorkspaceScopeRow[]
 }): WorkspaceScopeDecision {
-  const { sessionActiveOrganizationId, scopedSessionRow, candidateScopes } = input
+  const {
+    sessionActiveOrganizationId,
+    lastActiveOrganizationId,
+    scopedSessionRow,
+    candidateScopes,
+  } = input
 
   if (sessionActiveOrganizationId) {
     if (hasLinkedWedding(scopedSessionRow)) {
@@ -50,6 +70,16 @@ export function decideWorkspaceScope(input: {
         activeWeddingId: scopedSessionRow.weddingId,
         clearSessionActiveOrganizationId: false,
         persistActiveOrganizationId: null,
+      }
+    }
+
+    const preferredScope = findPreferredScope(candidateScopes, lastActiveOrganizationId)
+    if (preferredScope) {
+      return {
+        activeOrganization: toActiveOrganization(preferredScope),
+        activeWeddingId: preferredScope.weddingId,
+        clearSessionActiveOrganizationId: true,
+        persistActiveOrganizationId: preferredScope.organizationId,
       }
     }
 
@@ -76,6 +106,16 @@ export function decideWorkspaceScope(input: {
     return {
       ...EMPTY_SCOPE,
       clearSessionActiveOrganizationId: true,
+    }
+  }
+
+  const preferredScope = findPreferredScope(candidateScopes, lastActiveOrganizationId)
+  if (preferredScope) {
+    return {
+      activeOrganization: toActiveOrganization(preferredScope),
+      activeWeddingId: preferredScope.weddingId,
+      clearSessionActiveOrganizationId: false,
+      persistActiveOrganizationId: preferredScope.organizationId,
     }
   }
 

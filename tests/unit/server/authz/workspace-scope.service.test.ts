@@ -1,3 +1,4 @@
+
 import { WorkspaceScopeService } from '~/server/authz/workspace-scope.service'
 import type { WorkspaceScopeRow } from '~/server/authz/workspace-scope-resolver'
 
@@ -5,12 +6,14 @@ function makeRepository() {
   return {
     findScopeForOrganization: jest.fn(),
     findCandidateScopes: jest.fn(),
+    getLastActiveOrganizationId: jest.fn().mockResolvedValue(null),
+    setLastActiveOrganizationId: jest.fn(),
     setActiveOrganizationId: jest.fn(),
   }
 }
 
 describe('WorkspaceScopeService', () => {
-  it('returns explicit session scope without persistence writes when valid', async () => {
+  it('returns valid session scope and remembers it as the last active organization', async () => {
     const repository = makeRepository()
     repository.findScopeForOrganization.mockResolvedValue({
       organizationId: 'org-1',
@@ -27,16 +30,75 @@ describe('WorkspaceScopeService', () => {
       sessionActiveOrganizationId: 'org-1',
     })
 
+    expect(repository.getLastActiveOrganizationId).toHaveBeenCalledWith('user-1')
     expect(repository.findScopeForOrganization).toHaveBeenCalledWith('user-1', 'org-1')
     expect(repository.findCandidateScopes).not.toHaveBeenCalled()
     expect(repository.setActiveOrganizationId).not.toHaveBeenCalled()
+    expect(repository.setLastActiveOrganizationId).toHaveBeenCalledWith('user-1', 'org-1')
     expect(result).toEqual({
       activeOrganization: { organizationId: 'org-1', role: 'admin' },
       activeWeddingId: 'wedding-1',
     })
   })
 
-  it('clears stale session org and persists primary fallback', async () => {
+  it('does not rewrite the saved preference when it already matches the valid session', async () => {
+    const repository = makeRepository()
+    repository.getLastActiveOrganizationId.mockResolvedValue('org-1')
+    repository.findScopeForOrganization.mockResolvedValue({
+      organizationId: 'org-1',
+      isPrimaryWedding: false,
+      role: 'admin',
+      weddingId: 'wedding-1',
+    } satisfies WorkspaceScopeRow)
+
+    const service = new WorkspaceScopeService(repository)
+
+    await service.resolve({
+      userId: 'user-1',
+      sessionToken: 'tok-1',
+      sessionActiveOrganizationId: 'org-1',
+    })
+
+    expect(repository.setLastActiveOrganizationId).not.toHaveBeenCalled()
+    expect(repository.setActiveOrganizationId).not.toHaveBeenCalled()
+  })
+
+  it('clears stale session org and persists the saved preference when available', async () => {
+    const repository = makeRepository()
+    repository.getLastActiveOrganizationId.mockResolvedValue('org-preferred')
+    repository.findScopeForOrganization.mockResolvedValue(undefined)
+    repository.findCandidateScopes.mockResolvedValue([
+      {
+        organizationId: 'org-primary',
+        isPrimaryWedding: true,
+        role: 'owner',
+        weddingId: 'wedding-primary',
+      } satisfies WorkspaceScopeRow,
+      {
+        organizationId: 'org-preferred',
+        isPrimaryWedding: false,
+        role: 'admin',
+        weddingId: 'wedding-preferred',
+      } satisfies WorkspaceScopeRow,
+    ])
+
+    const service = new WorkspaceScopeService(repository)
+
+    const result = await service.resolve({
+      userId: 'user-1',
+      sessionToken: 'tok-1',
+      sessionActiveOrganizationId: 'org-stale',
+    })
+
+    expect(repository.setActiveOrganizationId).toHaveBeenCalledWith('tok-1', 'org-preferred')
+    expect(repository.setLastActiveOrganizationId).not.toHaveBeenCalled()
+    expect(result).toEqual({
+      activeOrganization: { organizationId: 'org-preferred', role: 'admin' },
+      activeWeddingId: 'wedding-preferred',
+    })
+  })
+
+  it('clears stale session org and persists primary fallback when no saved preference is available', async () => {
     const repository = makeRepository()
     repository.findScopeForOrganization.mockResolvedValue(undefined)
     repository.findCandidateScopes.mockResolvedValue([
@@ -57,9 +119,44 @@ describe('WorkspaceScopeService', () => {
     })
 
     expect(repository.setActiveOrganizationId).toHaveBeenCalledWith('tok-1', 'org-primary')
+    expect(repository.setLastActiveOrganizationId).toHaveBeenCalledWith('user-1', 'org-primary')
     expect(result).toEqual({
       activeOrganization: { organizationId: 'org-primary', role: 'owner' },
       activeWeddingId: 'wedding-primary',
+    })
+  })
+
+  it('uses saved preference and persists it when there is no active session organization', async () => {
+    const repository = makeRepository()
+    repository.getLastActiveOrganizationId.mockResolvedValue('org-preferred')
+    repository.findCandidateScopes.mockResolvedValue([
+      {
+        organizationId: 'org-primary',
+        isPrimaryWedding: true,
+        role: 'owner',
+        weddingId: 'wedding-primary',
+      } satisfies WorkspaceScopeRow,
+      {
+        organizationId: 'org-preferred',
+        isPrimaryWedding: false,
+        role: 'admin',
+        weddingId: 'wedding-preferred',
+      } satisfies WorkspaceScopeRow,
+    ])
+
+    const service = new WorkspaceScopeService(repository)
+
+    const result = await service.resolve({
+      userId: 'user-1',
+      sessionToken: 'tok-1',
+      sessionActiveOrganizationId: null,
+    })
+
+    expect(repository.setActiveOrganizationId).toHaveBeenCalledWith('tok-1', 'org-preferred')
+    expect(repository.setLastActiveOrganizationId).not.toHaveBeenCalled()
+    expect(result).toEqual({
+      activeOrganization: { organizationId: 'org-preferred', role: 'admin' },
+      activeWeddingId: 'wedding-preferred',
     })
   })
 
@@ -89,6 +186,7 @@ describe('WorkspaceScopeService', () => {
     })
 
     expect(repository.setActiveOrganizationId).toHaveBeenCalledWith('tok-1', 'org-1')
+    expect(repository.setLastActiveOrganizationId).toHaveBeenCalledWith('user-1', 'org-1')
     expect(result).toEqual({
       activeOrganization: { organizationId: 'org-1', role: 'owner' },
       activeWeddingId: 'wedding-1',

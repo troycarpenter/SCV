@@ -1,3 +1,4 @@
+
 jest.mock('~/server/db', () => ({
   db: {
     $queryRaw: jest.fn(),
@@ -61,6 +62,42 @@ describe('WorkspaceScopeRepository', () => {
 
     expect(result).toEqual(rows)
     expect(mockQueryRaw).toHaveBeenCalledTimes(1)
+  })
+
+  it('getLastActiveOrganizationId returns the saved organization ID', async () => {
+    mockQueryRaw.mockResolvedValue([
+      { lastActiveOrganizationId: 'org-1' },
+    ])
+
+    const result = await repository.getLastActiveOrganizationId('user-1')
+
+    expect(result).toBe('org-1')
+    expect(mockQueryRaw).toHaveBeenCalledTimes(1)
+  })
+
+  it('getLastActiveOrganizationId returns null when no preference exists', async () => {
+    mockQueryRaw.mockResolvedValue([])
+
+    const result = await repository.getLastActiveOrganizationId('user-1')
+
+    expect(result).toBeNull()
+    expect(mockQueryRaw).toHaveBeenCalledTimes(1)
+  })
+
+  it('setLastActiveOrganizationId writes the saved preference', async () => {
+    mockExecuteRaw.mockResolvedValue(1)
+
+    await repository.setLastActiveOrganizationId('user-1', 'org-1')
+
+    expect(mockExecuteRaw).toHaveBeenCalledTimes(1)
+  })
+
+  it('setLastActiveOrganizationId can clear the saved preference', async () => {
+    mockExecuteRaw.mockResolvedValue(1)
+
+    await repository.setLastActiveOrganizationId('user-1', null)
+
+    expect(mockExecuteRaw).toHaveBeenCalledTimes(1)
   })
 
   it('setActiveOrganizationId is a no-op when session token is missing', async () => {

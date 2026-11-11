@@ -16,7 +16,7 @@ WORKDIR /app
 FROM base AS deps
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json* .npmrc ./
 
 # Install dependencies
 RUN npm ci --ignore-scripts

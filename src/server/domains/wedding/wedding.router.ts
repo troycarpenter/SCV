@@ -6,6 +6,11 @@
  */
 
 import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
+import {
+  listMyWorkspaces,
+  switchWorkspace,
+} from '~/server/application/workspace/workspace-scope'
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
 import { requireActiveWeddingId } from '~/server/authz/active-wedding'
 import { requirePermission } from '~/server/authz/permission-checker'
@@ -132,6 +137,45 @@ export const weddingRouter = createTRPCRouter({
   hasWedding: protectedProcedure.query(({ ctx }) => {
     return ctx.auth.activeWeddingId !== null
   }),
+
+  /**
+   * List every wedding the current user can access.
+   */
+  listMyWorkspaces: protectedProcedure.query(async ({ ctx }) => {
+    const workspaces = await listMyWorkspaces(ctx.auth.userId)
+
+    return workspaces.map((workspace) => ({
+      ...workspace,
+      displayName: `${workspace.groomFirstName} ${workspace.groomLastName} & ${workspace.brideFirstName} ${workspace.brideLastName}`,
+      isActive:
+        workspace.organizationId === ctx.auth.activeOrganization?.organizationId,
+    }))
+  }),
+
+  /**
+   * Switch the current session and saved preference to another wedding.
+   */
+  switchWorkspace: protectedProcedure
+    .input(z.object({ organizationId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const workspace = await switchWorkspace({
+        session: ctx.auth.session,
+        userId: ctx.auth.userId,
+        organizationId: input.organizationId,
+      })
+
+      if (!workspace) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'You do not have access to that wedding.',
+        })
+      }
+
+      return {
+        ...workspace,
+        capabilities: readWorkspaceCapabilities(workspace.activeOrganization?.role),
+      }
+    }),
 
   /**
    * Canonical workspace payload for client-side role/capability display.
