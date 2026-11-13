@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { PhoneInput } from '~/components/ui/phone-input'
+import { Textarea } from '~/components/ui/textarea'
 import { optionalPhoneSchema } from '~/lib/phone/phone-validator'
 import { api } from '~/trpc/react'
 
@@ -27,6 +28,7 @@ type SelfFillFormData = {
   state?: string
   zipCode?: string
   country?: string
+  notes?: string
 }
 
 export default function SelfFillPage() {
@@ -47,6 +49,7 @@ export default function SelfFillPage() {
     state: z.string().trim().max(100).optional(),
     zipCode: z.string().trim().max(20).optional(),
     country: z.string().trim().max(100).optional(),
+    notes: z.string().trim().max(1000, t('notesTooLong')).optional(),
   })
 
   const {
@@ -104,6 +107,7 @@ export default function SelfFillPage() {
       state: '',
       zipCode: '',
       country: '',
+      notes: '',
     },
   })
 
@@ -120,6 +124,7 @@ export default function SelfFillPage() {
       state: data.state ?? null,
       zipCode: data.zipCode ?? null,
       country: data.country ?? null,
+      notes: data.notes?.trim() || null,
     })
   }
 
@@ -349,6 +354,20 @@ export default function SelfFillPage() {
                   )}
                 </div>
               </div>
+            </div>
+
+            {/* Other household members */}
+            <div className='space-y-2'>
+              <Label htmlFor='notes'>{t('householdNotes')}</Label>
+              <p className='text-muted-foreground text-xs'>{t('householdNotesNote')}</p>
+              <Textarea
+                id='notes'
+                placeholder={t('householdNotesPlaceholder')}
+                maxLength={1000}
+                {...register('notes')}
+                className={errors.notes ? 'border-destructive' : ''}
+              />
+              {errors.notes && <p className='text-destructive text-sm'>{errors.notes.message}</p>}
             </div>
 
             {mutationError && (

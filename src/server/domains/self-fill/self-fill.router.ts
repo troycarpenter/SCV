@@ -75,6 +75,7 @@ export function createSelfFillRouter(registrationService: ISelfFillRegistration)
         state: input.state ?? null,
         zipCode: input.zipCode ?? null,
         country: input.country ?? null,
+        notes: input.notes ?? null,
       })
     }),
 

@@ -80,7 +80,11 @@ export function AureliaHome({ weddingData, path, introText }: Readonly<TemplateS
           {weddingData.events.map((event) => (
             <div
               key={event.id}
-              className='flex flex-col items-center gap-3 rounded-[20px] border border-border bg-card px-8 py-10 text-center text-card-foreground'
+              className={`flex flex-col items-center gap-3 rounded-[20px] border border-border bg-card px-8 py-10 text-center text-card-foreground ${
+                weddingData.events.length === 1
+                  ? 'sm:col-span-2 sm:w-[calc(50%-1rem)] sm:justify-self-center'
+                  : ''
+              }`}
             >
               <h3 className={`${headingFont} text-3xl text-primary italic`}>{event.name}</h3>
               {!!event.date && (

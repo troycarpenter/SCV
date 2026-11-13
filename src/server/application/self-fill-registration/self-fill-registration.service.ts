@@ -105,6 +105,7 @@ export class SelfFillRegistrationService implements ISelfFillRegistration {
             state: data.state ?? null,
             zipCode: data.zipCode ?? null,
             country: data.country ?? null,
+            notes: data.notes?.trim() || null,
           },
           eventIds
         )

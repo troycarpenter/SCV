@@ -42,13 +42,19 @@ export function VoyageWeekend({
       {sorted.length ? (
         <section
           aria-label='Schedule'
-          className={`relative grid gap-8 ${summary ? 'md:grid-cols-3' : ''}`}
+          className={`relative grid gap-8 ${
+            summary ? (sorted.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3') : ''
+          }`}
         >
           {sorted.map((event) => (
             <article
               key={event.id}
               id={summary ? undefined : `event-${event.id}`}
-              className={`scroll-mt-24 border-border border-t py-8 ${summary ? '' : 'grid gap-6 md:grid-cols-[15rem_1fr]'}`}
+              className={`scroll-mt-24 border-border border-t py-8 ${
+                summary
+                  ? `text-center ${sorted.length === 1 ? 'md:col-start-2' : ''}`
+                  : 'grid gap-6 md:grid-cols-[15rem_1fr]'
+              }`}
             >
               <div className='space-y-3'>
                 <p className={`${labelFont} text-primary text-xs uppercase tracking-widest`}>

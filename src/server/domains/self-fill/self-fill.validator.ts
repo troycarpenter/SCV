@@ -58,6 +58,7 @@ export const selfFillGuestSchema = z.object({
   state: z.string().trim().max(100).nullish(),
   zipCode: z.string().trim().max(20).nullish(),
   country: z.string().trim().max(100).nullish(),
+  notes: z.string().trim().max(1000, 'Notes must be 1000 characters or fewer').nullish(),
 })
 
 export type SelfFillGuestSchemaInput = z.infer<typeof selfFillGuestSchema>
