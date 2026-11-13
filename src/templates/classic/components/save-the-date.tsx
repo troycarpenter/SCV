@@ -51,6 +51,14 @@ export function ClassicSaveTheDate({ weddingData, path }: Readonly<TemplateSurfa
             >
               Visit our website
             </Link>
+            {weddingData.website.isRsvpEnabled ? (
+              <Link
+                href={`${path}/rsvp`}
+                className='text-sm tracking-normal underline underline-offset-4 hover:text-primary'
+              >
+                RSVP
+              </Link>
+            ) : null}
           </div>
         </div>
       </article>

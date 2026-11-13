@@ -1,7 +1,8 @@
 // format: January 1, 2024
 function formatDateStandard(date: Date | null | undefined) {
   if (!date) return
-  return date.toLocaleDateString('en-us', {
+  const calendarDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+  return calendarDate.toLocaleDateString('en-us', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

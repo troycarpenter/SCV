@@ -49,6 +49,7 @@ export type HouseholdInviteData = {
    * itself with this so it matches the public Save the Date / Invitation pages.
    */
   templateId: string | null
+  isRsvpEnabled: boolean
   /**
    * The couple's editable Save the Date copy (when that section is enabled), so
    * the same customisation shown on the website surfaces flows into the invite.
@@ -563,6 +564,7 @@ export class HouseholdInviteService {
         where: { weddingId },
         select: {
           templateId: true,
+          isRsvpEnabled: true,
           websiteSections: {
             where: { type: WebsiteSectionType.SAVE_THE_DATE },
             select: { isEnabled: true, content: true },
@@ -590,6 +592,7 @@ export class HouseholdInviteService {
       weddingId,
       expiresAt,
       templateId: website?.templateId ?? null,
+      isRsvpEnabled: website?.isRsvpEnabled ?? false,
       saveTheDate,
       wedding: {
         ...weddingNames,

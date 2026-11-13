@@ -107,6 +107,7 @@ export default async function SaveTheDatePage({ params, searchParams }: SaveTheD
   const resolvedSearchParams = await searchParams
   const locale = await getLocale()
   const t = await getTranslations('invite')
+  const tRsvp = await getTranslations('rsvp')
   const cookieStore = await cookies()
   const code = cookieStore.get(householdInviteCookieName(websiteSubUrl))?.value
   const inviteData = await householdInviteService.getInviteData(websiteSubUrl, code)
@@ -241,6 +242,11 @@ export default async function SaveTheDatePage({ params, searchParams }: SaveTheD
                       {t('updateDetails')}
                     </Link>
                   </Button>
+                  {inviteData.isRsvpEnabled ? (
+                    <Button asChild size='lg'>
+                      <Link href={`/w/${websiteSubUrl}/rsvp`}>{tRsvp('sendRsvp')}</Link>
+                    </Button>
+                  ) : null}
                   <Button asChild size='lg' variant='outline'>
                     <Link href={`/w/${websiteSubUrl}`}>{t('viewWebsite')}</Link>
                   </Button>

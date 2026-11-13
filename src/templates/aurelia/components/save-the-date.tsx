@@ -61,6 +61,14 @@ export function AureliaSaveTheDate({ weddingData, path }: Readonly<TemplateSurfa
       >
         Visit our website
       </Link>
+      {weddingData.website.isRsvpEnabled ? (
+        <Link
+          href={`${path}/rsvp`}
+          className='text-[0.72rem] text-primary uppercase tracking-[0.3em] underline-offset-4 hover:underline'
+        >
+          RSVP
+        </Link>
+      ) : null}
     </main>
   )
 }
