@@ -141,11 +141,6 @@ export const auth = betterAuth({
   baseURL: appBaseUrl,
   secret: env.BETTER_AUTH_SECRET,
   trustedOrigins: (request) => resolveTrustedOrigins(request?.url),
-  onAPIError: {
-    onError: (error) => {
-      console.error('[Better Auth API error]', error)
-    },
-  },
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),

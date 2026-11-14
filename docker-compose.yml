@@ -58,7 +58,7 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://${POSTGRES_USER:-oswp_user}:${POSTGRES_PASSWORD:-oswp_password}@postgres:5432/${POSTGRES_DB:-oswp_db}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-change-me-in-production}
-      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3000}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-${NEXT_PUBLIC_APP_URL:-http://localhost:3000}}
       - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
       - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL:-}
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID:-}

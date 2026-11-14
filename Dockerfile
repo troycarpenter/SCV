@@ -17,9 +17,10 @@ FROM base AS deps
 
 # Copy package files
 COPY package.json package-lock.json* .npmrc ./
+COPY prisma ./prisma
 
 # Install dependencies
-RUN npm ci --ignore-scripts
+RUN npm ci
 
 # ==========================================
 # Builder stage - build the application

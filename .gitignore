@@ -58,5 +58,4 @@ yarn-error.log*
 *.tsbuildinfo
 
 # local data and backups
-/data/
 /package-lock.json.backup
