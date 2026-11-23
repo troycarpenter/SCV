@@ -7,6 +7,8 @@
 
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+
+import { formatCoupleFullNames } from '~/app/utils/helpers'
 import {
   listMyWorkspaces,
   switchWorkspace,
@@ -50,7 +52,7 @@ export const weddingRouter = createTRPCRouter({
   }),
 
   /**
-   * Get wedding details for settings page (names + first event date/location)
+   * Get wedding details and display preferences for the settings page
    */
   getDetails: protectedProcedure.query(async ({ ctx }) => {
     requirePermission(ctx.authz, { wedding: ['read'] })
@@ -68,6 +70,8 @@ export const weddingRouter = createTRPCRouter({
       groomLastName: wedding.groomLastName,
       brideFirstName: wedding.brideFirstName,
       brideLastName: wedding.brideLastName,
+      nameOrder: wedding.nameOrder ?? 'BRIDE_FIRST',
+      timeFormat: wedding.timeFormat ?? 'TWENTY_FOUR_HOUR',
       weddingDate: primaryEvent?.date?.toISOString() ?? undefined,
       weddingLocation: primaryEvent?.venue ?? undefined,
       primaryEventId: primaryEvent?.id ?? undefined,
@@ -75,7 +79,7 @@ export const weddingRouter = createTRPCRouter({
   }),
 
   /**
-   * Update wedding couple names from settings page
+   * Update wedding details and display preferences from settings
    */
   updateDetails: protectedProcedure
     .input(updateWeddingDetailsSchema)
@@ -91,6 +95,8 @@ export const weddingRouter = createTRPCRouter({
           groomLastName: input.groomLastName,
           brideFirstName: input.brideFirstName,
           brideLastName: input.brideLastName,
+          ...(input.nameOrder ? { nameOrder: input.nameOrder } : {}),
+          ...(input.timeFormat ? { timeFormat: input.timeFormat } : {}),
         },
       })
 
@@ -146,7 +152,7 @@ export const weddingRouter = createTRPCRouter({
 
     return workspaces.map((workspace) => ({
       ...workspace,
-      displayName: `${workspace.groomFirstName} ${workspace.groomLastName} & ${workspace.brideFirstName} ${workspace.brideLastName}`,
+      displayName: formatCoupleFullNames(workspace).join(' & ') || 'Wedding',
       isActive:
         workspace.organizationId === ctx.auth.activeOrganization?.organizationId,
     }))

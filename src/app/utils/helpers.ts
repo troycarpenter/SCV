@@ -22,6 +22,53 @@ function formatTime12Hour(time: string): string {
   return `${displayHour}:${minute} ${period}`
 }
 
+export type WeddingNameOrder = 'BRIDE_FIRST' | 'GROOM_FIRST'
+export type WeddingTimeFormat = 'TWELVE_HOUR' | 'TWENTY_FOUR_HOUR'
+
+type CoupleNameInput = {
+  brideFirstName?: string | null
+  brideLastName?: string | null
+  groomFirstName?: string | null
+  groomLastName?: string | null
+  nameOrder?: WeddingNameOrder | null
+}
+
+export function getCoupleNameOrder(wedding: CoupleNameInput) {
+  const bride = {
+    firstName: wedding.brideFirstName ?? '',
+    lastName: wedding.brideLastName ?? '',
+  }
+  const groom = {
+    firstName: wedding.groomFirstName ?? '',
+    lastName: wedding.groomLastName ?? '',
+  }
+  return wedding.nameOrder === 'GROOM_FIRST' ? [groom, bride] : [bride, groom]
+}
+
+export function formatCoupleNames(wedding: CoupleNameInput): string {
+  return getCoupleNameOrder(wedding)
+    .map(({ firstName }) => firstName)
+    .filter(Boolean)
+    .join(' & ')
+}
+
+export function formatCoupleFullNames(wedding: CoupleNameInput): string[] {
+  return getCoupleNameOrder(wedding)
+    .map(({ firstName, lastName }) => [firstName, lastName].filter(Boolean).join(' '))
+    .filter(Boolean)
+}
+
+export function formatCoupleInitials(wedding: CoupleNameInput): string {
+  return getCoupleNameOrder(wedding)
+    .map(({ firstName }) => firstName[0] ?? '')
+    .filter(Boolean)
+    .join(' & ')
+}
+
+export function formatWeddingTime(time: string, format?: WeddingTimeFormat | null): string {
+  return format === 'TWELVE_HOUR' ? formatTime12Hour(time) : time
+}
+
 // format: 01.24.2024
 function formatDateNumber(date: Date | null | undefined) {
   if (!date) return
@@ -170,4 +217,9 @@ export {
   generateRandomColor,
   generateTimes,
   formatTime12Hour,
+  formatWeddingTime,
+  formatCoupleNames,
+  formatCoupleFullNames,
+  formatCoupleInitials,
+  getCoupleNameOrder,
 }

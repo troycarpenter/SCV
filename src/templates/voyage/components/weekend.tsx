@@ -10,16 +10,25 @@ import {
 } from '~/templates/voyage/components/primitives'
 import { Band, LinkifiedBlurb } from '~/templates/voyage/components/sections'
 import { eventDate, orderedEvents, type VoyageEvent } from '~/templates/voyage/site'
-import { formatTime12Hour } from '~/app/utils/helpers'
+import { formatWeddingTime, type WeddingTimeFormat } from '~/app/utils/helpers'
+
+function formatEventTimeRange(event: VoyageEvent, timeFormat?: WeddingTimeFormat): string {
+  if (!event.startTime) return 'Time to be announced'
+  const start = formatWeddingTime(event.startTime, timeFormat)
+  const end = event.endTime ? `–${formatWeddingTime(event.endTime, timeFormat)}` : ''
+  return `${start}${end}`
+}
 
 export function VoyageWeekend({
   events,
   path,
   summary = false,
+  timeFormat,
 }: {
   events: VoyageEvent[]
   path: string
   summary?: boolean
+  timeFormat?: WeddingTimeFormat
 }) {
   const sorted = orderedEvents(events)
   return (
@@ -67,10 +76,7 @@ export function VoyageWeekend({
                   )}
                 </p>
                 <p className={`${headingFont} text-2xl`}>
-
-                  {event.startTime
-                    ? `${formatTime12Hour(event.startTime)}${event.endTime ? `–${formatTime12Hour(event.endTime)}` : ''}`
-                    : 'Time to be announced'}
+                  {formatEventTimeRange(event, timeFormat)}
                 </p>
               </div>
               <div className='space-y-4'>

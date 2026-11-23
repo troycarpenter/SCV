@@ -103,6 +103,8 @@ describe('weddingRouter', () => {
         groomLastName: 'Doe',
         brideFirstName: 'Jane',
         brideLastName: 'Smith',
+        nameOrder: 'BRIDE_FIRST',
+        timeFormat: 'TWENTY_FOUR_HOUR',
         weddingDate: new Date('2025-06-15').toISOString(),
         weddingLocation: 'Beach Resort',
         primaryEventId: 'event-123',
@@ -121,6 +123,8 @@ describe('weddingRouter', () => {
         groomLastName: 'Doe',
         brideFirstName: 'Jane',
         brideLastName: 'Smith',
+        nameOrder: 'BRIDE_FIRST',
+        timeFormat: 'TWENTY_FOUR_HOUR',
         weddingDate: undefined,
         weddingLocation: undefined,
         primaryEventId: undefined,
@@ -169,6 +173,29 @@ describe('weddingRouter', () => {
       expect(mockGetWeddingEvents).not.toHaveBeenCalled()
       expect(mockCreateEvent).not.toHaveBeenCalled()
       expect(mockUpdateEvent).not.toHaveBeenCalled()
+    })
+
+    it('updates the wedding display preferences', async () => {
+      mockUpdateWeddingFn.mockResolvedValue(mockWedding)
+
+      const caller = makeAuthCaller()
+      await expect(
+        caller.updateDetails({
+          ...validInput,
+          nameOrder: 'GROOM_FIRST',
+          timeFormat: 'TWELVE_HOUR',
+        })
+      ).resolves.toEqual({ success: true })
+
+      expect(mockUpdateWeddingFn).toHaveBeenCalledWith({
+        ctx: expect.objectContaining({ userId: 'user-123' }),
+        weddingId: mockWedding.id,
+        data: {
+          ...validInput,
+          nameOrder: 'GROOM_FIRST',
+          timeFormat: 'TWELVE_HOUR',
+        },
+      })
     })
 
     it('should reject invalid input (empty names)', async () => {

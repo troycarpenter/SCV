@@ -29,6 +29,8 @@ export const updateWeddingSchema = z.object({
   groomLastName: z.string().min(1).optional(),
   brideFirstName: z.string().min(1).optional(),
   brideLastName: z.string().min(1).optional(),
+  nameOrder: z.enum(['BRIDE_FIRST', 'GROOM_FIRST']).optional(),
+  timeFormat: z.enum(['TWELVE_HOUR', 'TWENTY_FOUR_HOUR']).optional(),
   enabledAddOns: z.array(z.string()).optional(),
 })
 
@@ -40,6 +42,8 @@ export const updateWeddingDetailsSchema = z.object({
   groomLastName: z.string().min(1, 'Groom last name is required'),
   brideFirstName: z.string().min(1, 'Bride first name is required'),
   brideLastName: z.string().min(1, 'Bride last name is required'),
+  nameOrder: z.enum(['BRIDE_FIRST', 'GROOM_FIRST']).optional(),
+  timeFormat: z.enum(['TWELVE_HOUR', 'TWENTY_FOUR_HOUR']).optional(),
 })
 
 export const toggleWeddingAddOnSchema = z.object({

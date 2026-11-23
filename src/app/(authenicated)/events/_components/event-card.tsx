@@ -1,6 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
+import { formatWeddingTime, type WeddingTimeFormat } from '~/app/utils/helpers'
 import {
   Calendar,
   ClipboardList,
@@ -26,6 +27,7 @@ import type { EventWithStats } from '~/server/domains/event/event.types'
 
 type EventCardProps = Readonly<{
   event: EventWithStats
+  timeFormat?: WeddingTimeFormat
   onEdit: (eventId: string) => void
   onDelete: (eventId: string) => void
   onManageGuests: (eventId: string) => void
@@ -36,6 +38,7 @@ type EventCardProps = Readonly<{
 
 function EventCardBase({
   event,
+  timeFormat = 'TWENTY_FOUR_HOUR',
   onEdit,
   onDelete,
   onManageGuests,
@@ -99,7 +102,8 @@ function EventCardBase({
 
           {event.startTime && event.endTime && (
             <div className='text-muted-foreground text-xs md:text-sm'>
-              {event.startTime} - {event.endTime}
+              {formatWeddingTime(event.startTime, timeFormat)} -{' '}
+              {formatWeddingTime(event.endTime, timeFormat)}
             </div>
           )}
 

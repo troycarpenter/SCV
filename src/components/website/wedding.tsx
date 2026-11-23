@@ -1,4 +1,5 @@
 import { headers } from 'next/headers'
+import { formatCoupleNames } from '~/app/utils/helpers'
 import type { InvitedHousehold } from '~/app/w/[websiteSubUrl]/_lib/invited-household'
 import { PersonalizedWelcome } from '~/components/website/personalized-welcome'
 import type { WeddingPageData } from '~/server/domains/website/website.types'
@@ -35,7 +36,7 @@ export default async function WeddingWebsite({
       <TemplateThemeProvider template={template}>
         {welcome}
         <Minimal
-          coupleNames={`${weddingData.groomFirstName} & ${weddingData.brideFirstName}`}
+          coupleNames={formatCoupleNames(weddingData)}
           isRsvpEnabled={weddingData.website.isRsvpEnabled}
           path={path}
         />

@@ -71,6 +71,8 @@ export class WeddingRepository {
         groomLastName: data.groomLastName,
         brideFirstName: data.brideFirstName,
         brideLastName: data.brideLastName,
+        nameOrder: data.nameOrder,
+        timeFormat: data.timeFormat,
         enabledAddOns: data.enabledAddOns ?? [],
         userWeddings: {
           create: {
@@ -103,6 +105,8 @@ export class WeddingRepository {
       groomLastName?: string
       brideFirstName?: string
       brideLastName?: string
+      nameOrder?: Wedding['nameOrder']
+      timeFormat?: Wedding['timeFormat']
       enabledAddOns?: string[]
     }
   ): Promise<Wedding> {

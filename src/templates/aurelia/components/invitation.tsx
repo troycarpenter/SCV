@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { formatDateStandard } from '~/app/utils/helpers'
+import { formatDateStandard, formatWeddingTime, getCoupleNameOrder } from '~/app/utils/helpers'
 import { AureliaHeaderImage } from '~/templates/aurelia/components/media'
 import type { TemplateSurfaceProps } from '~/templates/types'
 
@@ -9,6 +9,7 @@ export function AureliaInvitation({ weddingData, path }: Readonly<TemplateSurfac
   const { website } = weddingData
   const weddingEvent = weddingData.events.find((event) => event.name === 'Wedding Day')
   const copy = weddingData.invitation
+  const [firstPartner, secondPartner] = getCoupleNameOrder(weddingData)
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-24'>
@@ -18,11 +19,11 @@ export function AureliaInvitation({ weddingData, path }: Readonly<TemplateSurfac
           {copy?.preface ?? 'Together with their families'}
         </p>
         <h1 className={`${headingFont} text-4xl text-foreground italic sm:text-5xl`}>
-          {weddingData.groomFirstName} {weddingData.groomLastName}
+          {firstPartner.firstName} {firstPartner.lastName}
         </h1>
         <p className='text-muted-foreground text-xl italic'>and</p>
         <h1 className={`${headingFont} text-4xl text-foreground italic sm:text-5xl`}>
-          {weddingData.brideFirstName} {weddingData.brideLastName}
+          {secondPartner.firstName} {secondPartner.lastName}
         </h1>
         <p className='mt-2 text-muted-foreground text-sm'>
           {copy?.invitationLine ?? 'request the pleasure of your company'}
@@ -44,8 +45,8 @@ export function AureliaInvitation({ weddingData, path }: Readonly<TemplateSurfac
           )}
           {weddingEvent?.startTime && (
             <p className='text-muted-foreground text-sm'>
-              {weddingEvent.startTime}
-              {weddingEvent.endTime && ` – ${weddingEvent.endTime}`}
+              {formatWeddingTime(weddingEvent.startTime, weddingData.timeFormat)}
+              {weddingEvent.endTime && ` – ${formatWeddingTime(weddingEvent.endTime, weddingData.timeFormat)}`}
             </p>
           )}
           {weddingEvent?.venue && (

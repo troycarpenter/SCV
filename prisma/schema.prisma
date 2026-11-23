@@ -9,6 +9,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum WeddingNameOrder {
+  BRIDE_FIRST
+  GROOM_FIRST
+}
+
+enum WeddingTimeFormat {
+  TWELVE_HOUR
+  TWENTY_FOUR_HOUR
+}
+
 // Core: Wedding is the root entity
 model Wedding {
   id                       String        @id @default(uuid())
@@ -18,6 +28,8 @@ model Wedding {
   groomLastName            String
   brideFirstName           String
   brideLastName            String
+  nameOrder                WeddingNameOrder  @default(BRIDE_FIRST)
+  timeFormat               WeddingTimeFormat @default(TWENTY_FOUR_HOUR)
   enabledAddOns            String[]      @default([]) // e.g., ["website", "tasks", "gifts"]
   selfFillToken            String?       @unique // Unique token for self-fill guest registration link
   selfFillTokenGeneratedAt DateTime? // When the current token was generated (enables expiry)

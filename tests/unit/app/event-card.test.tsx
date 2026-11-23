@@ -84,6 +84,22 @@ describe('EventCard', () => {
     expect(screen.getByRole('button', { name: /event actions/i })).toBeInTheDocument()
   })
 
+  it('formats event times according to the wedding preference', () => {
+    render(
+      <EventCard
+        event={{ ...mockEvent, startTime: '14:30', endTime: '16:00' }}
+        timeFormat='TWELVE_HOUR'
+        onEdit={jest.fn()}
+        onDelete={jest.fn()}
+        onManageGuests={jest.fn()}
+        onManageQuestions={jest.fn()}
+        onToggleCollectRsvp={jest.fn()}
+      />
+    )
+
+    expect(screen.getByText('2:30 PM - 4:00 PM')).toBeInTheDocument()
+  })
+
   it('calls RSVP toggle callback when collect RSVP switch is changed', () => {
     const onToggleCollectRsvp = jest.fn()
 

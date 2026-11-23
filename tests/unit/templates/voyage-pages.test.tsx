@@ -176,7 +176,7 @@ describe('Voyage multi-page guest journeys', () => {
     expect(events[0]).toHaveTextContent('Celebration 0')
     expect(events[7]).toHaveTextContent('Celebration 7')
     expect(events[0]).toHaveTextContent('20 May 2027')
-    expect(events[0]).toHaveTextContent('3:30 PM–11:00 PM')
+    expect(events[0]).toHaveTextContent('15:30–23:00')
     expect(events[0]).toHaveTextContent('Venue 0')
     expect(events[0]).toHaveTextContent('Formal')
     expect(

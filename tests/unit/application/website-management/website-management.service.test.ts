@@ -279,6 +279,8 @@ describe('WebsiteManagementService', () => {
       const result = await service.fetchWeddingData('johndoeandjanesmith', undefined)
 
       expect(result.groomFirstName).toBe('John')
+      expect(result.nameOrder).toBe('BRIDE_FIRST')
+      expect(result.timeFormat).toBe('TWENTY_FOUR_HOUR')
       expect(result.website).toMatchObject({
         id: 'website-123',
         subUrl: 'johndoeandjanesmith',

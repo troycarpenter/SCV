@@ -5,6 +5,7 @@
  * Represents the public wedding website configuration.
  */
 
+import type { WeddingNameOrder, WeddingTimeFormat } from '@prisma/client'
 import type { Question, QuestionWithOptions } from '~/server/domains/question'
 import type {
   InvitationSectionContent,
@@ -115,6 +116,8 @@ export type WeddingDate = {
  * Complete wedding data for public website display
  */
 export type WeddingPageData = {
+  nameOrder?: WeddingNameOrder
+  timeFormat?: WeddingTimeFormat
   groomFirstName: string | null
   groomLastName: string | null
   brideFirstName: string | null

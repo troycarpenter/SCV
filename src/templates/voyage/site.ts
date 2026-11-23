@@ -1,4 +1,5 @@
 import type { WeddingPageData } from '~/server/domains/website/website.types'
+import { formatCoupleNames, getCoupleNameOrder } from '~/app/utils/helpers'
 import type {
   WebsiteSection,
   WebsiteSectionType,
@@ -90,13 +91,14 @@ export function flightDates(events: VoyageEvent[]) {
   }
 }
 export function coupleIdentity(wedding: WeddingPageData) {
-  const names = [wedding.groomFirstName, wedding.brideFirstName].filter(
-    (name): name is string => !!name
-  )
+  const orderedNames = getCoupleNameOrder(wedding)
+    .map(({ firstName }) => firstName)
+    .filter(Boolean)
+  const coupleNames = formatCoupleNames(wedding)
   return {
-    coupleNames: names.join(' & ') || 'Our Wedding',
-    contactNames: names.join(' or ') || 'the couple',
-    monogram: names.map((name) => name[0]).join(' | ') || 'Our Wedding',
+    coupleNames: coupleNames || 'Our Wedding',
+    contactNames: orderedNames.join(' or ') || 'the couple',
+    monogram: orderedNames.map((name) => name[0]).join(' | ') || 'Our Wedding',
   }
 }
 /** Keep previously shared in-page links working. */

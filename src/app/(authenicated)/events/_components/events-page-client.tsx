@@ -8,6 +8,7 @@
  */
 
 import { Loader2, Plus } from 'lucide-react'
+import type { WeddingTimeFormat } from '~/app/utils/helpers'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { EventCard } from '~/app/(authenicated)/events/_components/event-card'
@@ -35,10 +36,15 @@ import { api } from '~/trpc/react'
 
 type EventsPageClientProps = Readonly<{
   initialEvents: EventWithStats[]
+  timeFormat?: WeddingTimeFormat
   initialRsvpEventId?: string
 }>
 
-export function EventsPageClient({ initialEvents, initialRsvpEventId }: EventsPageClientProps) {
+export function EventsPageClient({
+  initialEvents,
+  timeFormat = 'TWENTY_FOUR_HOUR',
+  initialRsvpEventId,
+}: EventsPageClientProps) {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [editingEvent, setEditingEvent] = useState<EventWithStats | undefined>(undefined)
   const [deletingEvent, setDeletingEvent] = useState<EventWithStats | undefined>(undefined)
@@ -325,6 +331,7 @@ export function EventsPageClient({ initialEvents, initialRsvpEventId }: EventsPa
           <EventCard
             key={event.id}
             event={event}
+            timeFormat={timeFormat}
             onEdit={handleEditEvent}
             onDelete={handleDeleteEvent}
             onManageGuests={handleManageGuests}

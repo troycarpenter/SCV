@@ -135,7 +135,7 @@ export function VoyageHome({ weddingData, path, introText }: Readonly<TemplateSu
         </div>
       </nav>
       {destination ? <VoyageDestination content={destination.content} /> : null}
-      <VoyageWeekend events={weddingData.events} path={path} summary />
+      <VoyageWeekend events={weddingData.events} path={path} summary timeFormat={weddingData.timeFormat} />
       {story?.content.body ? (
         <Band tone='cream'>
           <div className='grid items-center gap-10 md:grid-cols-2'>

@@ -1,5 +1,8 @@
+import { formatCoupleNames } from '~/app/utils/helpers'
+
 type WeddingInfoInput = {
   brideFirstName?: string | null
+  nameOrder?: 'BRIDE_FIRST' | 'GROOM_FIRST' | null
   groomFirstName?: string | null
   date?: {
     standardFormat?: string | null
@@ -14,10 +17,7 @@ type SidebarWeddingInfo = {
 }
 
 export function getSidebarWeddingInfo(weddingData?: WeddingInfoInput): SidebarWeddingInfo {
-  const groomFirstName = weddingData?.groomFirstName?.trim() ?? ''
-  const brideFirstName = weddingData?.brideFirstName?.trim() ?? ''
-  const coupleName =
-    groomFirstName && brideFirstName ? `${groomFirstName} & ${brideFirstName}` : undefined
+  const coupleName = weddingData ? formatCoupleNames(weddingData) || undefined : undefined
   const weddingDate = weddingData?.date?.standardFormat?.trim() || undefined
   const weddingLocation = weddingData?.location?.trim() || undefined
 

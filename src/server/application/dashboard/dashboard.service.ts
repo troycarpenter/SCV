@@ -84,6 +84,8 @@ export class DashboardService {
       groomLastName: string
       brideFirstName: string
       brideLastName: string
+      nameOrder: WeddingData['nameOrder']
+      timeFormat: WeddingData['timeFormat']
     }
   ): Promise<DashboardData | null> {
     const weddingId = wedding.id
@@ -199,6 +201,8 @@ export class DashboardService {
       groomLastName: string
       brideFirstName: string
       brideLastName: string
+      nameOrder: WeddingData['nameOrder']
+      timeFormat: WeddingData['timeFormat']
     },
     weddingDate: Date | null | undefined,
     weddingLocation: string | null | undefined
@@ -229,6 +233,8 @@ export class DashboardService {
 
     return {
       website: websiteWithQuestions,
+      nameOrder: wedding.nameOrder,
+      timeFormat: wedding.timeFormat,
       groomFirstName: wedding.groomFirstName,
       groomLastName: wedding.groomLastName,
       brideFirstName: wedding.brideFirstName,

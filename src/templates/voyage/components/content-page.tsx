@@ -107,7 +107,7 @@ function PageContent({ weddingData, path, page }: TemplateSurfaceProps & { page:
               { label: 'Wedding transport', href: '/weekend#wedding-transport' },
             ]}
           />
-          <VoyageWeekend events={events} path={path} />
+          <VoyageWeekend events={events} path={path} timeFormat={weddingData.timeFormat} />
           <Band id='wedding-transport' tone='cream'>
             <div className='mx-auto max-w-3xl space-y-4'>
               <h2 className={`${headingFont} text-4xl`}>Getting to the celebrations</h2>

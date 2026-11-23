@@ -1,4 +1,5 @@
 import { headers } from 'next/headers'
+import { formatCoupleNames } from '~/app/utils/helpers'
 import { redirect } from 'next/navigation'
 import type { ReactNode } from 'react'
 import AuthenticatedAppShell from '~/components/layout/authenticated-app-shell'
@@ -39,10 +40,7 @@ export async function AuthenticatedLayoutFrame(props: Readonly<AuthenticatedLayo
   let weddingLocation: string | undefined
   try {
     const details = await api.wedding.getDetails()
-    const brideFirstName = details?.brideFirstName?.trim() ?? ''
-    const groomFirstName = details?.groomFirstName?.trim() ?? ''
-    coupleName =
-      groomFirstName && brideFirstName ? `${groomFirstName} & ${brideFirstName}` : undefined
+    coupleName = details ? formatCoupleNames(details) || undefined : undefined
     weddingDate = details?.weddingDate
       ? new Date(details.weddingDate).toLocaleDateString('en-us', {
           weekday: 'long',

@@ -1,6 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { formatDateStandard, formatTime12Hour } from '~/app/utils/helpers'
+import {
+  formatCoupleInitials,
+  formatCoupleNames,
+  formatDateStandard,
+  formatWeddingTime,
+} from '~/app/utils/helpers'
 import { ClassicCoupleGallery, ClassicHeaderImage } from '~/templates/classic/components/media'
 import { ClassicNavbar } from '~/templates/classic/components/navbar'
 import { ClassicSections } from '~/templates/classic/components/sections'
@@ -8,13 +13,15 @@ import type { TemplateSurfaceProps } from '~/templates/types'
 
 export function ClassicHome({ weddingData, path, introText }: Readonly<TemplateSurfaceProps>) {
   const { website } = weddingData
+  const coupleNames = formatCoupleNames(weddingData)
+  const coupleInitials = formatCoupleInitials(weddingData)
 
   return (
     <main className='flex flex-col items-center justify-center gap-20 pb-24 text-center text-zinc-500 tracking-widest'>
       <ClassicHeaderImage url={website.headerImageUrl} />
       <div className='text-center'>
         <h1 className='my-5 font-medium text-6xl tracking-widest'>
-          {weddingData.groomFirstName} & {weddingData.brideFirstName}
+          {coupleNames}
         </h1>
         <span className='text-lg'>
           {weddingData.date?.standardFormat ?? 'Date To Be Announced'}
@@ -63,8 +70,8 @@ export function ClassicHome({ weddingData, path, introText }: Readonly<TemplateS
 
           {!!event.startTime && (
             <span className='font-thin text-2xl'>
-               {formatTime12Hour(event.startTime)}
-               {!!event.endTime && ` - ${formatTime12Hour(event.endTime)}`}
+               {formatWeddingTime(event.startTime, weddingData.timeFormat)}
+               {!!event.endTime && ` - ${formatWeddingTime(event.endTime, weddingData.timeFormat)}`}
             </span>
           )}
         </div>
@@ -74,7 +81,7 @@ export function ClassicHome({ weddingData, path, introText }: Readonly<TemplateS
 
       <div className='text-center'>
         <h2 className='border-black border-b px-5 pb-6 text-6xl'>
-          {weddingData.groomFirstName?.[0] ?? 'G'} & {weddingData.brideFirstName?.[0] ?? 'B'}
+          {coupleInitials || 'G & B'}
         </h2>
         <p className='mt-4 text-lg tracking-widest'>
           {weddingData.date.numberFormat?.toString() ?? 'Date To Be Announced'}

@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og'
+import { getCoupleNameOrder } from '~/app/utils/helpers'
 
 import { loadWeddingBySubUrl } from '~/app/w/[websiteSubUrl]/_lib/load-wedding-by-suburl'
 import { TEMPLATE_CATALOG } from '~/templates/catalog'
@@ -19,10 +20,11 @@ export default async function Icon({ params }: IconRouteProps) {
   const color = '#ffffff'
 
   if (loadResult.status === 'ready') {
-    const { groomFirstName, brideFirstName, website } = loadResult.weddingData
-    const brideInitial = brideFirstName?.[0] ?? ''
-    const groomInitial = groomFirstName?.[0] ?? ''
-    initials = `${groomInitial}${brideInitial}`.toUpperCase() || 'W'
+    const { website } = loadResult.weddingData
+    initials = getCoupleNameOrder(loadResult.weddingData)
+      .map(({ firstName }) => firstName[0] ?? '')
+      .join('')
+      .toUpperCase() || 'W'
 
     const template =
       TEMPLATE_CATALOG.find((meta) => meta.id === website.templateId) ?? TEMPLATE_CATALOG[0]

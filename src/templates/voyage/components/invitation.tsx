@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { formatDateStandard } from '~/app/utils/helpers'
+import { formatDateStandard, formatWeddingTime, getCoupleNameOrder } from '~/app/utils/helpers'
 import type { TemplateSurfaceProps } from '~/templates/types'
 import {
   BotanicalSprig,
@@ -19,6 +19,7 @@ export function VoyageInvitation({ weddingData, path }: Readonly<TemplateSurface
   const venue = weddingEvent?.venue ?? null
   const dateLabel = weddingData.date?.standardFormat ?? 'Date to be announced'
   const copy = weddingData.invitation
+  const [firstPartner, secondPartner] = getCoupleNameOrder(weddingData)
 
   return (
     <main className='flex min-h-screen w-full items-center justify-center bg-[#F7F3EC] px-6 py-20'>
@@ -34,11 +35,11 @@ export function VoyageInvitation({ weddingData, path }: Readonly<TemplateSurface
         <div className='relative flex flex-col items-center gap-5'>
           <Eyebrow>{copy?.preface ?? 'Together with their families'}</Eyebrow>
           <h1 className={sectionHeadingClass}>
-            {weddingData.groomFirstName} {weddingData.groomLastName}
+            {firstPartner.firstName} {firstPartner.lastName}
           </h1>
           <span className={`${headingFont} text-[#B15C41] text-xl italic`}>and</span>
           <h1 className={sectionHeadingClass}>
-            {weddingData.brideFirstName} {weddingData.brideLastName}
+            {secondPartner.firstName} {secondPartner.lastName}
           </h1>
           <p className={`${bodyFont} text-[#6F675D]`}>
             {copy?.invitationLine ?? 'request the pleasure of your company'}
@@ -58,7 +59,9 @@ export function VoyageInvitation({ weddingData, path }: Readonly<TemplateSurface
             {weddingEvent?.date ? (
               <p className={`${bodyFont} text-[#6F675D] text-sm`}>
                 {formatDateStandard(weddingEvent.date)}
-                {weddingEvent.startTime ? ` · ${weddingEvent.startTime}` : ''}
+                {weddingEvent.startTime
+                  ? ` · ${formatWeddingTime(weddingEvent.startTime, weddingData.timeFormat)}`
+                  : ''}
               </p>
             ) : null}
             {venue ? (

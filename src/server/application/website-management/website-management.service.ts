@@ -254,6 +254,8 @@ export class WebsiteManagementService {
       .sort((a, b) => a.position - b.position)
 
     return {
+      nameOrder: wedding.nameOrder,
+      timeFormat: wedding.timeFormat,
       groomFirstName: wedding.groomFirstName,
       groomLastName: wedding.groomLastName,
       brideFirstName: wedding.brideFirstName,

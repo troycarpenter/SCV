@@ -187,7 +187,7 @@ describe('household invite pages', () => {
     // the two events span May 30–31, and the first event's venue is the location.
     expect(screen.getByText('May 30, 2027 – May 31, 2027')).toBeInTheDocument()
     expect(screen.getByText('Hacienda')).toBeInTheDocument()
-    expect(screen.getByText('Harry & Hermione')).toBeInTheDocument()
+    expect(screen.getByText('Hermione & Harry')).toBeInTheDocument()
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument()
     // No tag-along guests in this household, so the "joining the trip" callout is absent.
     expect(screen.queryByText(/joining the trip/i)).not.toBeInTheDocument()
@@ -268,7 +268,7 @@ describe('household invite pages', () => {
     })
 
     expect(mockGetPublicWeddingSummary).toHaveBeenCalledWith('ronald-and-ginny')
-    const expectedTitle = "Save the Date — Ronald & Ginny's Wedding"
+    const expectedTitle = "Save the Date — Ginny & Ronald's Wedding"
     expect(metadata.title).toBe(expectedTitle)
     expect(metadata.openGraph?.title).toBe(expectedTitle)
     expect(metadata.twitter?.title).toBe(expectedTitle)
@@ -290,9 +290,9 @@ describe('household invite pages', () => {
       params: Promise.resolve({ websiteSubUrl: 'ronald-and-ginny' }),
     })
 
-    expect(metadata.title).toBe("Save the Date — Ronald & Ginny's Wedding")
+    expect(metadata.title).toBe("Save the Date — Ginny & Ronald's Wedding")
     expect(metadata.openGraph?.description).toBe(
-      'Ronald & Ginny are getting married. Open your household save the date to confirm your details.'
+      'Ginny & Ronald are getting married. Open your household save the date to confirm your details.'
     )
   })
 

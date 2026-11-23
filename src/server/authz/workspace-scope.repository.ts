@@ -3,6 +3,7 @@ export type WorkspaceChoiceRow = WorkspaceScopeRow & {
   groomLastName: string
   brideFirstName: string
   brideLastName: string
+  nameOrder: 'BRIDE_FIRST' | 'GROOM_FIRST'
 }
 
 import { randomUUID } from 'node:crypto'
@@ -87,7 +88,8 @@ export class WorkspaceScopeRepository {
         w."groomFirstName" AS "groomFirstName",
         w."groomLastName" AS "groomLastName",
         w."brideFirstName" AS "brideFirstName",
-        w."brideLastName" AS "brideLastName"
+        w."brideLastName" AS "brideLastName",
+        w."nameOrder" AS "nameOrder"
       FROM "member" m
       JOIN "Wedding" w ON w."organizationId" = m."organizationId"
       LEFT JOIN "UserWedding" uw
@@ -101,7 +103,8 @@ export class WorkspaceScopeRepository {
         w."groomFirstName",
         w."groomLastName",
         w."brideFirstName",
-        w."brideLastName"
+        w."brideLastName",
+        w."nameOrder"
       ORDER BY
         COALESCE(BOOL_OR(uw."isPrimary"), FALSE) DESC,
         MIN(m."createdAt") ASC
