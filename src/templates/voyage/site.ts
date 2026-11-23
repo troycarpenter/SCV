@@ -1,5 +1,5 @@
-import type { WeddingPageData } from '~/server/domains/website/website.types'
 import { formatCoupleNames, getCoupleNameOrder } from '~/app/utils/helpers'
+import type { WeddingPageData } from '~/server/domains/website/website.types'
 import type {
   WebsiteSection,
   WebsiteSectionType,

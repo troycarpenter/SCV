@@ -46,7 +46,8 @@ export function ClassicInvitation({ weddingData, path }: Readonly<TemplateSurfac
               {weddingEvent?.startTime && (
                 <p className='font-thin text-lg'>
                   {formatWeddingTime(weddingEvent.startTime, weddingData.timeFormat)}
-                  {weddingEvent.endTime && ` - ${formatWeddingTime(weddingEvent.endTime, weddingData.timeFormat)}`}
+                  {weddingEvent.endTime &&
+                    ` - ${formatWeddingTime(weddingEvent.endTime, weddingData.timeFormat)}`}
                 </p>
               )}
               {weddingEvent?.venue && (

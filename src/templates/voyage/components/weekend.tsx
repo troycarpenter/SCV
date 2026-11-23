@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { formatWeddingTime, type WeddingTimeFormat } from '~/app/utils/helpers'
 import { Decor } from '~/templates/voyage/components/decor'
 import {
   bodyFont,
@@ -10,7 +11,6 @@ import {
 } from '~/templates/voyage/components/primitives'
 import { Band, LinkifiedBlurb } from '~/templates/voyage/components/sections'
 import { eventDate, orderedEvents, type VoyageEvent } from '~/templates/voyage/site'
-import { formatWeddingTime, type WeddingTimeFormat } from '~/app/utils/helpers'
 
 function formatEventTimeRange(event: VoyageEvent, timeFormat?: WeddingTimeFormat): string {
   if (!event.startTime) return 'Time to be announced'

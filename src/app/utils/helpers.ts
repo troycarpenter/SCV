@@ -33,7 +33,9 @@ type CoupleNameInput = {
   nameOrder?: WeddingNameOrder | null
 }
 
-export function getCoupleNameOrder(wedding: CoupleNameInput) {
+export function getCoupleNameOrder(
+  wedding: CoupleNameInput
+): [{ firstName: string; lastName: string }, { firstName: string; lastName: string }] {
   const bride = {
     firstName: wedding.brideFirstName ?? '',
     lastName: wedding.brideLastName ?? '',
@@ -214,12 +216,7 @@ export {
   formatDateHTML5,
   formatDateNumber,
   formatDateStandard,
+  formatTime12Hour,
   generateRandomColor,
   generateTimes,
-  formatTime12Hour,
-  formatWeddingTime,
-  formatCoupleNames,
-  formatCoupleFullNames,
-  formatCoupleInitials,
-  getCoupleNameOrder,
 }

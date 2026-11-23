@@ -1,7 +1,7 @@
 import Link from 'next/link'
+import { getCoupleNameOrder } from '~/app/utils/helpers'
 import { AddToCalendarButtons } from '~/components/website/add-to-calendar-buttons'
 import { buildSaveTheDateCalendarLinks } from '~/lib/website/calendar'
-import { getCoupleNameOrder } from '~/app/utils/helpers'
 import type { TemplateSurfaceProps } from '~/templates/types'
 import { HeroBackground } from '~/templates/voyage/components/media'
 import {

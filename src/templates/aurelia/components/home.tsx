@@ -34,7 +34,7 @@ export function AureliaHome({ weddingData, path, introText }: Readonly<TemplateS
           We're getting married
         </p>
         <h1 className={`${headingFont} text-6xl text-foreground italic leading-tight sm:text-7xl`}>
-{coupleNames}
+          {coupleNames}
         </h1>
         <div className='flex items-center gap-4 text-muted-foreground'>
           <span className='h-px w-12 bg-border' />
@@ -101,7 +101,8 @@ export function AureliaHome({ weddingData, path, introText }: Readonly<TemplateS
               {!!event.startTime && (
                 <span className='text-muted-foreground text-sm'>
                   {formatWeddingTime(event.startTime, weddingData.timeFormat)}
-                  {!!event.endTime && ` – ${formatWeddingTime(event.endTime, weddingData.timeFormat)}`}
+                  {!!event.endTime &&
+                    ` – ${formatWeddingTime(event.endTime, weddingData.timeFormat)}`}
                 </span>
               )}
               {!!event.venue && (

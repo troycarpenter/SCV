@@ -63,7 +63,9 @@ export default function WeddingSettingsForm({ initialData }: WeddingSettingsForm
     },
   })
 
-  const parsedCeremonyDate = initialData.weddingDate ? new Date(`${initialData.weddingDate.slice(0, 10)}T00:00:00`) : null
+  const parsedCeremonyDate = initialData.weddingDate
+    ? new Date(`${initialData.weddingDate.slice(0, 10)}T00:00:00`)
+    : null
   const ceremonyDateLabel =
     parsedCeremonyDate && !Number.isNaN(parsedCeremonyDate.valueOf())
       ? parsedCeremonyDate.toLocaleDateString('en-US', {
@@ -155,9 +157,8 @@ export default function WeddingSettingsForm({ initialData }: WeddingSettingsForm
           <h3 className='font-mono text-[0.62rem] text-foreground/55 uppercase tracking-widest'>
             Display Preferences
           </h3>
-          <p className='mt-2 text-sm text-foreground/65'>
-            Choose how names and event times appear throughout this wedding's
-            dashboard and website.
+          <p className='mt-2 text-foreground/65 text-sm'>
+            Choose how names and event times appear throughout this wedding's dashboard and website.
           </p>
         </div>
         <div className='grid gap-4 sm:grid-cols-2'>

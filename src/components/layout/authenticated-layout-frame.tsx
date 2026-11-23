@@ -1,7 +1,7 @@
 import { headers } from 'next/headers'
-import { formatCoupleNames } from '~/app/utils/helpers'
 import { redirect } from 'next/navigation'
 import type { ReactNode } from 'react'
+import { formatCoupleNames } from '~/app/utils/helpers'
 import AuthenticatedAppShell from '~/components/layout/authenticated-app-shell'
 import { auth } from '~/lib/auth'
 import { getUserFirstName, getUserInitials } from '~/lib/user-display'

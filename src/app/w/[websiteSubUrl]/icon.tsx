@@ -21,10 +21,11 @@ export default async function Icon({ params }: IconRouteProps) {
 
   if (loadResult.status === 'ready') {
     const { website } = loadResult.weddingData
-    initials = getCoupleNameOrder(loadResult.weddingData)
-      .map(({ firstName }) => firstName[0] ?? '')
-      .join('')
-      .toUpperCase() || 'W'
+    initials =
+      getCoupleNameOrder(loadResult.weddingData)
+        .map(({ firstName }) => firstName[0] ?? '')
+        .join('')
+        .toUpperCase() || 'W'
 
     const template =
       TEMPLATE_CATALOG.find((meta) => meta.id === website.templateId) ?? TEMPLATE_CATALOG[0]

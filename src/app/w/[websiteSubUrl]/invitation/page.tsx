@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { formatCoupleNames } from '~/app/utils/helpers'
 import { notFound } from 'next/navigation'
+import { formatCoupleNames } from '~/app/utils/helpers'
 
 import { loadVisitorWedding } from '~/app/w/[websiteSubUrl]/_lib/load-visitor-wedding'
 import { grantWebsiteAccess } from '~/app/w/[websiteSubUrl]/_lib/website-access'

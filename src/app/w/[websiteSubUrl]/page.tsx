@@ -38,7 +38,9 @@ export async function generateMetadata({ params }: RootRouteHandlerProps): Promi
 
   const coupleNames = formatCoupleFullNames(loadResult.weddingData).join(' & ')
   const title = coupleNames ? `${coupleNames} Wedding` : 'Wedding Website'
-  const description = introText || (coupleNames ? `Join us for the wedding of ${coupleNames}.` : 'Join us for the wedding.')
+  const description =
+    introText ||
+    (coupleNames ? `Join us for the wedding of ${coupleNames}.` : 'Join us for the wedding.')
 
   const ogImageUrl = `/api/og/wedding/${websiteSubUrl}`
 

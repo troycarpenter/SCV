@@ -218,7 +218,7 @@ describe('Voyage multi-page guest journeys', () => {
 
   it('provides contact copy and the WhatsApp community link', () => {
     render(<VoyageContentPage page='faq' weddingData={wedding} path='/w/couple' />)
-    expect(screen.getByText(/contact Diego or Holly/)).toBeInTheDocument()
+    expect(screen.getByText(/contact Holly or Diego/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Join.*WhatsApp/i })).toHaveAttribute(
       'href',
       'https://chat.whatsapp.com/IOxwS7icvCoEclNlRBbvwa?mode=gi_t'

@@ -23,7 +23,7 @@ describe('wedding display preferences', () => {
     const groomFirst = { ...wedding, nameOrder: 'GROOM_FIRST' as const }
     expect(formatCoupleNames(groomFirst)).toBe('John & Alice')
     expect(formatCoupleFullNames(groomFirst)).toEqual(['John Doe', 'Alice Smith'])
-    expect(formatCoupleInitials(groomFirst)).toBe('J & J')
+    expect(formatCoupleInitials(groomFirst)).toBe('J & A')
   })
 
   it('formats 12-hour times without changing stored time strings', () => {

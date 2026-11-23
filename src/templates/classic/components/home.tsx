@@ -20,9 +20,7 @@ export function ClassicHome({ weddingData, path, introText }: Readonly<TemplateS
     <main className='flex flex-col items-center justify-center gap-20 pb-24 text-center text-zinc-500 tracking-widest'>
       <ClassicHeaderImage url={website.headerImageUrl} />
       <div className='text-center'>
-        <h1 className='my-5 font-medium text-6xl tracking-widest'>
-          {coupleNames}
-        </h1>
+        <h1 className='my-5 font-medium text-6xl tracking-widest'>{coupleNames}</h1>
         <span className='text-lg'>
           {weddingData.date?.standardFormat ?? 'Date To Be Announced'}
         </span>
@@ -70,8 +68,8 @@ export function ClassicHome({ weddingData, path, introText }: Readonly<TemplateS
 
           {!!event.startTime && (
             <span className='font-thin text-2xl'>
-               {formatWeddingTime(event.startTime, weddingData.timeFormat)}
-               {!!event.endTime && ` - ${formatWeddingTime(event.endTime, weddingData.timeFormat)}`}
+              {formatWeddingTime(event.startTime, weddingData.timeFormat)}
+              {!!event.endTime && ` - ${formatWeddingTime(event.endTime, weddingData.timeFormat)}`}
             </span>
           )}
         </div>
@@ -80,9 +78,7 @@ export function ClassicHome({ weddingData, path, introText }: Readonly<TemplateS
       <ClassicSections sections={weddingData.sections} />
 
       <div className='text-center'>
-        <h2 className='border-black border-b px-5 pb-6 text-6xl'>
-          {coupleInitials || 'G & B'}
-        </h2>
+        <h2 className='border-black border-b px-5 pb-6 text-6xl'>{coupleInitials || 'G & B'}</h2>
         <p className='mt-4 text-lg tracking-widest'>
           {weddingData.date.numberFormat?.toString() ?? 'Date To Be Announced'}
         </p>

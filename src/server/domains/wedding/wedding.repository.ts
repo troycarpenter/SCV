@@ -58,6 +58,8 @@ export class WeddingRepository {
     groomLastName: string
     brideFirstName: string
     brideLastName: string
+    nameOrder?: 'BRIDE_FIRST' | 'GROOM_FIRST'
+    timeFormat?: 'TWELVE_HOUR' | 'TWENTY_FOUR_HOUR'
     enabledAddOns?: string[]
   }): Promise<Wedding> {
     // One nested write (a single transaction): the wedding, the legacy

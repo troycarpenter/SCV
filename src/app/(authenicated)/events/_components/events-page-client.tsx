@@ -8,13 +8,13 @@
  */
 
 import { Loader2, Plus } from 'lucide-react'
-import type { WeddingTimeFormat } from '~/app/utils/helpers'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { EventCard } from '~/app/(authenicated)/events/_components/event-card'
 import { ManageEventGuestsDialog } from '~/app/(authenicated)/events/_components/manage-event-guests-dialog'
 import { ManageEventQuestionsDialog } from '~/app/(authenicated)/events/_components/manage-event-questions-dialog'
 import { ManageGeneralQuestionsDialog } from '~/app/(authenicated)/events/_components/manage-general-questions-dialog'
+import type { WeddingTimeFormat } from '~/app/utils/helpers'
 import {
   type EventFormData,
   transformToServerInput,
@@ -259,7 +259,7 @@ export function EventsPageClient({
             </span>
           </div>
           <div className='max-w-sm'>
-            <p className='font-serif text-xl text-foreground'>No events yet</p>
+            <p className='font-serif text-foreground text-xl'>No events yet</p>
             <p className='mt-2 font-mono text-[0.65rem] text-foreground/55 leading-relaxed tracking-wider'>
               Get started by creating your first wedding event. Add ceremonies, receptions,
               rehearsal dinners, and more.
