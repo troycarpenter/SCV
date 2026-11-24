@@ -5,8 +5,14 @@ import type { WeddingPageData } from '~/server/domains/website/website.types'
 
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    href,
+    children,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 jest.mock('~/lib/website/calendar', () => ({
@@ -16,7 +22,7 @@ jest.mock('~/lib/website/calendar', () => ({
 const mockBuildSaveTheDateCalendarLinks = jest.mocked(buildSaveTheDateCalendarLinks)
 
 const weddingData = {
-  nameOrder: 'GROOM_FIRST',
+  nameOrder: 'BRIDE_FIRST',
   groomFirstName: 'Alex',
   groomLastName: 'Smith',
   brideFirstName: 'Jordan',
@@ -67,12 +73,12 @@ describe('VoyageSaveTheDate', () => {
   it('uses the configured couple-name order in calendar details', () => {
     render(<VoyageSaveTheDate weddingData={weddingData} path='/w/alex-jordan' />)
 
-    expect(screen.getByRole('heading', { name: 'Alex & Jordan' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Jordan & Alex' })).toBeInTheDocument()
     expect(mockBuildSaveTheDateCalendarLinks).toHaveBeenCalledWith(
       expect.objectContaining({
-        title: 'Alex & Jordan Wedding',
+        title: 'Jordan & Alex Wedding',
         description:
-          'Save the date for the wedding of Alex & Jordan! Formal invitation to follow. https://example.com/w/alex-jordan',
+          'Save the date for the wedding of Jordan & Alex! Formal invitation to follow. https://example.com/w/alex-jordan',
       })
     )
   })
