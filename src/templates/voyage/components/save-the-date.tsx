@@ -16,9 +16,7 @@ import {
 export function VoyageSaveTheDate({ weddingData, path }: Readonly<TemplateSurfaceProps>) {
   const { website } = weddingData
   const heroUrl = website.headerImageUrl ?? website.coverPhotoUrl ?? null
-  const weddingEvent =
-    weddingData.events.find((event) => event.name === 'Wedding Day') ?? weddingData.events[0]
-  const venue = weddingEvent?.venue ?? null
+  const venue = weddingData.events[0]?.venue ?? null
   const dateLabel = weddingData.date?.standardFormat ?? 'Date to be announced'
   const copy = weddingData.saveTheDate
   const [firstPartner, secondPartner] = getCoupleNameOrder(weddingData)
