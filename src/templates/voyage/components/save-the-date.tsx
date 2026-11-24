@@ -22,7 +22,7 @@ export function VoyageSaveTheDate({ weddingData, path }: Readonly<TemplateSurfac
   const dateLabel = weddingData.date?.standardFormat ?? 'Date to be announced'
   const copy = weddingData.saveTheDate
   const [firstPartner, secondPartner] = getCoupleNameOrder(weddingData)
-  const coupleNames = `${weddingData.groomFirstName} & ${weddingData.brideFirstName}`
+  const coupleNames = `${firstPartner.firstName} & ${secondPartner.firstName}`
   const calendarLinks = buildSaveTheDateCalendarLinks({
     title: `${coupleNames} Wedding`,
     description: `Save the date for the wedding of ${coupleNames}! Formal invitation to follow. ${website.url}`,
