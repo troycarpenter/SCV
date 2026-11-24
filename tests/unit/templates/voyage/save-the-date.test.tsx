@@ -71,6 +71,33 @@ describe('VoyageSaveTheDate', () => {
     mockBuildSaveTheDateCalendarLinks.mockClear()
   })
 
+  it('uses the first event venue even when a later event is named Wedding Day', () => {
+    const events = [
+      weddingData.events[0],
+      {
+        ...weddingData.events[0],
+        id: 'event-2',
+        name: 'Wedding Day',
+        venue: 'The Ceremony Hall',
+      },
+    ]
+    const data = {
+      ...weddingData,
+      events: [
+        { ...events[0], name: 'Welcome Dinner', venue: 'The First Venue' },
+        events[1],
+      ],
+    } as WeddingPageData
+
+    render(<VoyageSaveTheDate weddingData={data} path='/w/alex-jordan' />)
+
+    expect(screen.getByText('The First Venue')).toBeInTheDocument()
+    expect(screen.queryByText('The Ceremony Hall')).not.toBeInTheDocument()
+    expect(mockBuildSaveTheDateCalendarLinks).toHaveBeenCalledWith(
+      expect.objectContaining({ location: 'The First Venue', events: data.events })
+    )
+  })
+
   it('uses the configured couple-name order in calendar details', () => {
     render(<VoyageSaveTheDate weddingData={weddingData} path='/w/alex-jordan' />)
 
