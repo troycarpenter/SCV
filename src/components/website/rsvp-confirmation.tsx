@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import type { Dispatch, SetStateAction } from 'react'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { RxCrossCircled } from 'react-icons/rx'
+import { formatCoupleNames } from '~/app/utils/helpers'
 import type { Event, RsvpFormResponse } from '~/app/utils/shared-types'
 import { useRsvpForm } from '~/components/contexts/rsvp-form-context'
 
@@ -19,8 +20,7 @@ export default function RsvpConfirmation({ basePath, setCurrentStep }: RsvpConfi
     <div className='flex flex-col pt-5 pb-8'>
       <h2 className='text-2xl tracking-widest'>
         {t('confirmationTitle', {
-          groomFirstName: rsvpFormData.weddingData.groomFirstName ?? '',
-          brideFirstName: rsvpFormData.weddingData.brideFirstName ?? '',
+          coupleNames: formatCoupleNames(rsvpFormData.weddingData),
         })}
       </h2>
       <a
