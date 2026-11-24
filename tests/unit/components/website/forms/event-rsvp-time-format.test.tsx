@@ -67,6 +67,6 @@ describe('EventRsvpForm', () => {
       />
     )
 
-    expect(screen.getByText(new RegExp(expectedTime.replace(':', ':')))).toBeInTheDocument()
+    expect(screen.getByText(expectedTime, { exact: false })).toBeInTheDocument()
   })
 })
