@@ -47,7 +47,8 @@ export default function EventRsvpForm({
           <AiOutlineCalendar size={20} />
           <span>
             {formatDateStandard(event.date)}
-            {event.startTime && ` at ${formatWeddingTime(event.startTime, rsvpFormData.weddingData.timeFormat)}`}
+            {event.startTime &&
+              ` at ${formatWeddingTime(event.startTime, rsvpFormData.weddingData.timeFormat)}`}
           </span>
         </div>
       )}
