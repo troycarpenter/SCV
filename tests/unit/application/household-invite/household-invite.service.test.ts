@@ -61,6 +61,7 @@ const inviteHousehold = {
     groomLastName: 'Potter',
     brideFirstName: 'Hermione',
     brideLastName: 'Granger',
+    nameOrder: 'BRIDE_FIRST',
     events: [{ date: new Date('2027-05-30T12:00:00.000Z'), venue: 'Hogsmeade, Scotland' }],
   },
   guests: [
@@ -135,6 +136,7 @@ describe('HouseholdInviteService', () => {
       wedding: {
         groomFirstName: 'Diego',
         brideFirstName: 'Laura',
+        nameOrder: 'GROOM_FIRST',
         events: [{ date: weddingDate, venue: 'Puebla, Mexico' }],
       },
     })
@@ -143,6 +145,7 @@ describe('HouseholdInviteService', () => {
     await expect(service.getPublicWeddingSummary('harry-and-hermione')).resolves.toEqual({
       groomFirstName: 'Diego',
       brideFirstName: 'Laura',
+      nameOrder: 'GROOM_FIRST',
       date: weddingDate,
       venue: 'Puebla, Mexico',
     })
@@ -153,6 +156,7 @@ describe('HouseholdInviteService', () => {
           select: {
             groomFirstName: true,
             brideFirstName: true,
+            nameOrder: true,
             events: {
               where: { name: 'Wedding Day' },
               orderBy: { date: 'asc' },
@@ -168,13 +172,19 @@ describe('HouseholdInviteService', () => {
   it('falls back to null date and venue when the wedding has no Wedding Day event', async () => {
     const db = createDb()
     db.website.findFirst.mockResolvedValue({
-      wedding: { groomFirstName: 'Diego', brideFirstName: 'Laura', events: [] },
+      wedding: {
+        groomFirstName: 'Diego',
+        brideFirstName: 'Laura',
+        nameOrder: 'BRIDE_FIRST',
+        events: [],
+      },
     })
     const service = new HouseholdInviteService(db as never)
 
     await expect(service.getPublicWeddingSummary('harry-and-hermione')).resolves.toEqual({
       groomFirstName: 'Diego',
       brideFirstName: 'Laura',
+      nameOrder: 'BRIDE_FIRST',
       date: null,
       venue: null,
     })

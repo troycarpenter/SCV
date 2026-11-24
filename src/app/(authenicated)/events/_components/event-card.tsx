@@ -11,6 +11,7 @@ import {
   Users,
 } from 'lucide-react'
 import { memo } from 'react'
+import { formatWeddingTime, type WeddingTimeFormat } from '~/app/utils/helpers'
 
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -26,6 +27,7 @@ import type { EventWithStats } from '~/server/domains/event/event.types'
 
 type EventCardProps = Readonly<{
   event: EventWithStats
+  timeFormat?: WeddingTimeFormat
   onEdit: (eventId: string) => void
   onDelete: (eventId: string) => void
   onManageGuests: (eventId: string) => void
@@ -36,6 +38,7 @@ type EventCardProps = Readonly<{
 
 function EventCardBase({
   event,
+  timeFormat = 'TWENTY_FOUR_HOUR',
   onEdit,
   onDelete,
   onManageGuests,
@@ -60,7 +63,16 @@ function EventCardBase({
             {event.date && (
               <CardDescription className='mt-1.5 flex items-center gap-1.5'>
                 <Calendar className='h-3.5 w-3.5 shrink-0' />
-                <span className='text-xs md:text-sm'>{format(new Date(event.date.getUTCFullYear(), event.date.getUTCMonth(), event.date.getUTCDate()), 'PPP')}</span>
+                <span className='text-xs md:text-sm'>
+                  {format(
+                    new Date(
+                      event.date.getUTCFullYear(),
+                      event.date.getUTCMonth(),
+                      event.date.getUTCDate()
+                    ),
+                    'PPP'
+                  )}
+                </span>
               </CardDescription>
             )}
           </div>
@@ -99,7 +111,8 @@ function EventCardBase({
 
           {event.startTime && event.endTime && (
             <div className='text-muted-foreground text-xs md:text-sm'>
-              {event.startTime} - {event.endTime}
+              {formatWeddingTime(event.startTime, timeFormat)} -{' '}
+              {formatWeddingTime(event.endTime, timeFormat)}
             </div>
           )}
 

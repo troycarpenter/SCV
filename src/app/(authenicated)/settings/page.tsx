@@ -47,6 +47,8 @@ export default async function SettingsPage() {
                   groomLastName: details.groomLastName,
                   brideFirstName: details.brideFirstName,
                   brideLastName: details.brideLastName,
+                  nameOrder: details.nameOrder,
+                  timeFormat: details.timeFormat,
                   weddingDate: details.weddingDate,
                   weddingLocation: details.weddingLocation,
                   primaryEventId: details.primaryEventId,

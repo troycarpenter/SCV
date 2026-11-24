@@ -4,9 +4,13 @@ import EventsPage from '~/app/(authenicated)/events/page'
 
 const mockGetRequiredWedding = jest.fn()
 const mockGetEventsWithStats = jest.fn()
-const mockEventsPageClient = jest.fn(({ initialEvents }: { initialEvents: unknown[] }) => (
-  <div data-testid='events-page-client'>{initialEvents.length}</div>
-))
+const mockEventsPageClient = jest.fn(
+  ({ initialEvents, timeFormat }: { initialEvents: unknown[]; timeFormat?: string }) => (
+    <div data-testid='events-page-client'>
+      {initialEvents.length}:{timeFormat}
+    </div>
+  )
+)
 const mockDashboardTopbar = jest.fn(
   (_props: { title?: string; showManagementActions?: boolean }) => (
     <header data-testid='dashboard-topbar'>Topbar</header>
@@ -26,8 +30,13 @@ jest.mock('~/trpc/server', () => ({
 }))
 
 jest.mock('~/app/(authenicated)/events/_components/events-page-client', () => ({
-  EventsPageClient: ({ initialEvents }: { initialEvents: unknown[] }) =>
-    mockEventsPageClient({ initialEvents }),
+  EventsPageClient: ({
+    initialEvents,
+    timeFormat,
+  }: {
+    initialEvents: unknown[]
+    timeFormat?: string
+  }) => mockEventsPageClient({ initialEvents, timeFormat }),
 }))
 
 jest.mock('~/components/dashboard/dashboard-topbar', () => ({
@@ -39,13 +48,14 @@ jest.mock('~/components/dashboard/dashboard-topbar', () => ({
 describe('EventsPage', () => {
   beforeEach(() => {
     mockGetRequiredWedding.mockReset()
+    mockGetRequiredWedding.mockResolvedValue({ timeFormat: 'TWENTY_FOUR_HOUR' })
     mockGetEventsWithStats.mockReset()
     mockEventsPageClient.mockClear()
     mockDashboardTopbar.mockClear()
   })
 
   it('fetches events on server and passes initialEvents to client', async () => {
-    mockGetRequiredWedding.mockResolvedValue(undefined)
+    mockGetRequiredWedding.mockResolvedValue({ timeFormat: 'TWENTY_FOUR_HOUR' })
     mockGetEventsWithStats.mockResolvedValue([{ id: 'evt-1' }])
 
     const page = await EventsPage({})
@@ -55,12 +65,13 @@ describe('EventsPage', () => {
     expect(mockGetEventsWithStats).toHaveBeenCalledTimes(1)
     expect(mockEventsPageClient).toHaveBeenCalledWith({
       initialEvents: [{ id: 'evt-1' }],
+      timeFormat: 'TWENTY_FOUR_HOUR',
     })
     expect(screen.getByTestId('events-page-client')).toBeInTheDocument()
   })
 
   it('passes an empty array when server query returns undefined', async () => {
-    mockGetRequiredWedding.mockResolvedValue(undefined)
+    mockGetRequiredWedding.mockResolvedValue({ timeFormat: 'TWENTY_FOUR_HOUR' })
     mockGetEventsWithStats.mockResolvedValue(undefined)
 
     const page = await EventsPage({})
@@ -68,11 +79,12 @@ describe('EventsPage', () => {
 
     expect(mockEventsPageClient).toHaveBeenCalledWith({
       initialEvents: [],
+      timeFormat: 'TWENTY_FOUR_HOUR',
     })
   })
 
   it('renders dashboard topbar and authenticated page shell', async () => {
-    mockGetRequiredWedding.mockResolvedValue(undefined)
+    mockGetRequiredWedding.mockResolvedValue({ timeFormat: 'TWENTY_FOUR_HOUR' })
     mockGetEventsWithStats.mockResolvedValue([])
 
     const page = await EventsPage({})

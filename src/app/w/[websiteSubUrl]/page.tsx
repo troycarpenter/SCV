@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { formatCoupleFullNames } from '~/app/utils/helpers'
 
 import { resolveInvitedHousehold } from '~/app/w/[websiteSubUrl]/_lib/invited-household'
 import { loadVisitorWedding } from '~/app/w/[websiteSubUrl]/_lib/load-visitor-wedding'
@@ -32,17 +33,14 @@ export async function generateMetadata({ params }: RootRouteHandlerProps): Promi
   }
 
   const {
-    brideFirstName,
-    brideLastName,
-    groomFirstName,
-    groomLastName,
     website: { introText },
   } = loadResult.weddingData
 
-  const brideName = brideFirstName && brideLastName ? `${brideFirstName} ${brideLastName}` : ''
-  const groomName = groomFirstName && groomLastName ? `${groomFirstName} ${groomLastName}` : ''
-  const title = groomName && brideName ? `${groomName} & ${brideName} Wedding` : 'Wedding Website'
-  const description = introText || `Join us for the wedding of ${groomName} and ${brideName}.`
+  const coupleNames = formatCoupleFullNames(loadResult.weddingData).join(' & ')
+  const title = coupleNames ? `${coupleNames} Wedding` : 'Wedding Website'
+  const description =
+    introText ||
+    (coupleNames ? `Join us for the wedding of ${coupleNames}.` : 'Join us for the wedding.')
 
   const ogImageUrl = `/api/og/wedding/${websiteSubUrl}`
 

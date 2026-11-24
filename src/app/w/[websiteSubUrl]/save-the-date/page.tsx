@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { getLocale, getTranslations } from 'next-intl/server'
 
-import { formatDateStandard } from '~/app/utils/helpers'
+import { formatCoupleNames, formatDateStandard } from '~/app/utils/helpers'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent } from '~/components/ui/card'
 import { AddToCalendarButtons } from '~/components/website/add-to-calendar-buttons'
@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: SaveTheDatePageProps): Promis
   const summary = await householdInviteService.getPublicWeddingSummary(websiteSubUrl)
   if (!summary) return baseMetadata
 
-  const coupleNames = `${summary.groomFirstName} & ${summary.brideFirstName}`
+  const coupleNames = formatCoupleNames(summary)
   const title = `Save the Date — ${coupleNames}'s Wedding`
   const description = buildSaveTheDateDescription(
     coupleNames,
@@ -119,7 +119,7 @@ export default async function SaveTheDatePage({ params, searchParams }: SaveTheD
   const template = resolveTemplate(inviteData.templateId)
   const saveTheDateCopy = inviteData.saveTheDate
 
-  const coupleNames = `${inviteData.wedding.groomFirstName} & ${inviteData.wedding.brideFirstName}`
+  const coupleNames = formatCoupleNames(inviteData.wedding)
 
   // Everything below is inherited from the wedding's events — no hardcoded copy.
   const datedEvents = inviteData.events

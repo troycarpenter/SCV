@@ -23,6 +23,8 @@ type WeddingSettingsFormProps = {
     groomLastName: string
     brideFirstName: string
     brideLastName: string
+    nameOrder?: 'BRIDE_FIRST' | 'GROOM_FIRST'
+    timeFormat?: 'TWELVE_HOUR' | 'TWENTY_FOUR_HOUR'
     weddingDate?: string
     weddingLocation?: string
     primaryEventId?: string
@@ -40,6 +42,8 @@ export default function WeddingSettingsForm({ initialData }: WeddingSettingsForm
       groomLastName: initialData.groomLastName,
       brideFirstName: initialData.brideFirstName,
       brideLastName: initialData.brideLastName,
+      nameOrder: initialData.nameOrder ?? 'BRIDE_FIRST',
+      timeFormat: initialData.timeFormat ?? 'TWENTY_FOUR_HOUR',
     },
   })
 
@@ -48,18 +52,20 @@ export default function WeddingSettingsForm({ initialData }: WeddingSettingsForm
 
   const updateDetails = api.wedding.updateDetails.useMutation({
     onSuccess: (_data, variables) => {
-      toast.success('Names updated successfully.')
+      toast.success('Wedding settings updated successfully.')
       form.reset(variables)
       void utils.dashboard.getForActiveWorkspace.invalidate()
       void utils.wedding.getDetails.invalidate()
       router.refresh()
     },
     onError: () => {
-      toast.error('Failed to update names. Please try again.')
+      toast.error('Failed to update wedding settings. Please try again.')
     },
   })
 
-  const parsedCeremonyDate = initialData.weddingDate ? new Date(`${initialData.weddingDate.slice(0, 10)}T00:00:00`) : null
+  const parsedCeremonyDate = initialData.weddingDate
+    ? new Date(`${initialData.weddingDate.slice(0, 10)}T00:00:00`)
+    : null
   const ceremonyDateLabel =
     parsedCeremonyDate && !Number.isNaN(parsedCeremonyDate.valueOf())
       ? parsedCeremonyDate.toLocaleDateString('en-US', {
@@ -141,6 +147,44 @@ export default function WeddingSettingsForm({ initialData }: WeddingSettingsForm
             {errors.brideLastName && (
               <p className='text-destructive text-sm'>{errors.brideLastName.message}</p>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Display Preferences */}
+      <div className='rounded-lg border border-border/90 bg-card/85 p-5'>
+        <div className='mb-4'>
+          <h3 className='font-mono text-[0.62rem] text-foreground/55 uppercase tracking-widest'>
+            Display Preferences
+          </h3>
+          <p className='mt-2 text-foreground/65 text-sm'>
+            Choose how names and event times appear throughout this wedding's dashboard and website.
+          </p>
+        </div>
+        <div className='grid gap-4 sm:grid-cols-2'>
+          <div className='space-y-2'>
+            <Label htmlFor='nameOrder'>Couple name order</Label>
+            <select
+              id='nameOrder'
+              {...register('nameOrder')}
+              disabled={isSubmitting || updateDetails.isPending}
+              className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+            >
+              <option value='BRIDE_FIRST'>Bride first</option>
+              <option value='GROOM_FIRST'>Groom first</option>
+            </select>
+          </div>
+          <div className='space-y-2'>
+            <Label htmlFor='timeFormat'>Time format</Label>
+            <select
+              id='timeFormat'
+              {...register('timeFormat')}
+              disabled={isSubmitting || updateDetails.isPending}
+              className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+            >
+              <option value='TWENTY_FOUR_HOUR'>24-hour (14:30)</option>
+              <option value='TWELVE_HOUR'>12-hour (2:30 PM)</option>
+            </select>
           </div>
         </div>
       </div>

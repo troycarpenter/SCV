@@ -94,6 +94,8 @@ describe('SettingsPage', () => {
       groomLastName: 'Doe',
       brideFirstName: 'Jane',
       brideLastName: 'Smith',
+      nameOrder: 'BRIDE_FIRST',
+      timeFormat: 'TWENTY_FOUR_HOUR',
       weddingDate: '2026-04-01T00:00:00.000Z',
       weddingLocation: 'Beach Resort',
       primaryEventId: 'event-123',

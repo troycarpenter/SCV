@@ -1,3 +1,4 @@
+import type { WeddingNameOrder, WeddingTimeFormat } from '@prisma/client'
 import type { inferRouterOutputs } from '@trpc/server'
 import type { FileWithPath } from 'react-dropzone'
 
@@ -102,6 +103,8 @@ type WeddingDate = {
 }
 
 type WeddingData = {
+  nameOrder?: WeddingNameOrder
+  timeFormat?: WeddingTimeFormat
   groomFirstName: string
   groomLastName: string
   brideFirstName: string
@@ -167,6 +170,8 @@ type Website = {
 type PublicWebsite = Omit<Website, 'password'>
 
 type WeddingPageData = {
+  nameOrder?: WeddingNameOrder
+  timeFormat?: WeddingTimeFormat
   groomFirstName: string | null
   groomLastName: string | null
   brideFirstName: string | null

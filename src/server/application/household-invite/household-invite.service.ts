@@ -58,6 +58,7 @@ export type HouseholdInviteData = {
   wedding: {
     groomFirstName: string
     groomLastName: string
+    nameOrder: 'BRIDE_FIRST' | 'GROOM_FIRST'
     brideFirstName: string
     brideLastName: string
     date: Date | null
@@ -255,6 +256,7 @@ export class HouseholdInviteService {
   async getPublicWeddingSummary(subUrl: string): Promise<{
     groomFirstName: string
     brideFirstName: string
+    nameOrder: 'BRIDE_FIRST' | 'GROOM_FIRST'
     date: Date | null
     venue: string | null
   } | null> {
@@ -265,6 +267,7 @@ export class HouseholdInviteService {
           select: {
             groomFirstName: true,
             brideFirstName: true,
+            nameOrder: true,
             events: {
               where: { name: WEDDING_DAY_EVENT_NAME },
               orderBy: { date: 'asc' },
@@ -282,6 +285,7 @@ export class HouseholdInviteService {
     return {
       groomFirstName: website.wedding.groomFirstName,
       brideFirstName: website.wedding.brideFirstName,
+      nameOrder: website.wedding.nameOrder,
       date: weddingDayEvent?.date ?? null,
       venue: weddingDayEvent?.venue ?? null,
     }
@@ -537,6 +541,7 @@ export class HouseholdInviteService {
               groomFirstName: true,
               groomLastName: true,
               brideFirstName: true,
+              nameOrder: true,
               brideLastName: true,
               events: {
                 orderBy: { date: 'asc' },

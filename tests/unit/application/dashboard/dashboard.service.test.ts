@@ -387,6 +387,8 @@ const mockWedding = {
   groomLastName: 'Smith',
   brideFirstName: 'Jane',
   brideLastName: 'Doe',
+  nameOrder: 'BRIDE_FIRST',
+  timeFormat: 'TWENTY_FOUR_HOUR',
   eventDate: new Date('2025-06-15'),
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -472,6 +474,8 @@ describe('DashboardService', () => {
       groomLastName: 'Smith',
       brideFirstName: 'Jane',
       brideLastName: 'Doe',
+      nameOrder: 'BRIDE_FIRST',
+      timeFormat: 'TWENTY_FOUR_HOUR',
       enabledAddOns: [],
       selfFillToken: null,
       selfFillTokenGeneratedAt: null,
@@ -565,6 +569,8 @@ describe('DashboardService', () => {
       expect(result?.weddingData.groomLastName).toBe('Smith')
       expect(result?.weddingData.brideFirstName).toBe('Jane')
       expect(result?.weddingData.brideLastName).toBe('Doe')
+      expect(result?.weddingData.nameOrder).toBe('BRIDE_FIRST')
+      expect(result?.weddingData.timeFormat).toBe('TWENTY_FOUR_HOUR')
     })
 
     it('should include formatted wedding date', async () => {

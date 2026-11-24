@@ -1,3 +1,5 @@
+import type { WeddingNameOrder, WeddingTimeFormat } from '@prisma/client'
+
 /**
  * Wedding Domain - Types
  *
@@ -15,6 +17,8 @@ export type Wedding = {
   groomLastName: string
   brideFirstName: string
   brideLastName: string
+  nameOrder: WeddingNameOrder
+  timeFormat: WeddingTimeFormat
   enabledAddOns: string[] // e.g., ["website", "tasks", "gifts"]
   selfFillToken: string | null
   selfFillTokenGeneratedAt: Date | null
@@ -57,5 +61,7 @@ export type UpdateWeddingInput = {
   groomLastName?: string
   brideFirstName?: string
   brideLastName?: string
+  nameOrder?: WeddingNameOrder
+  timeFormat?: WeddingTimeFormat
   enabledAddOns?: string[]
 }

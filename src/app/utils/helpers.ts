@@ -22,6 +22,71 @@ function formatTime12Hour(time: string): string {
   return `${displayHour}:${minute} ${period}`
 }
 
+export type WeddingNameOrder = 'BRIDE_FIRST' | 'GROOM_FIRST'
+export type WeddingTimeFormat = 'TWELVE_HOUR' | 'TWENTY_FOUR_HOUR'
+
+type CoupleNameInput = {
+  brideFirstName?: string | null
+  brideLastName?: string | null
+  groomFirstName?: string | null
+  groomLastName?: string | null
+  nameOrder?: WeddingNameOrder | null
+}
+
+export function getCoupleNameOrder(
+  wedding: CoupleNameInput
+): [{ firstName: string; lastName: string }, { firstName: string; lastName: string }] {
+  const bride = {
+    firstName: wedding.brideFirstName ?? '',
+    lastName: wedding.brideLastName ?? '',
+  }
+  const groom = {
+    firstName: wedding.groomFirstName ?? '',
+    lastName: wedding.groomLastName ?? '',
+  }
+  return wedding.nameOrder === 'GROOM_FIRST' ? [groom, bride] : [bride, groom]
+}
+
+export function formatCoupleNames(wedding: CoupleNameInput): string {
+  return getCoupleNameOrder(wedding)
+    .map(({ firstName }) => firstName)
+    .filter(Boolean)
+    .join(' & ')
+}
+
+export function formatCoupleFullNames(wedding: CoupleNameInput): string[] {
+  return getCoupleNameOrder(wedding)
+    .map(({ firstName, lastName }) => [firstName, lastName].filter(Boolean).join(' '))
+    .filter(Boolean)
+}
+
+export function formatCoupleInitials(wedding: CoupleNameInput): string {
+  return getCoupleNameOrder(wedding)
+    .map(({ firstName }) => firstName[0] ?? '')
+    .filter(Boolean)
+    .join(' & ')
+}
+
+function formatTime24Hour(time: string): string {
+  const match = time.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i)
+  if (!match) return time
+
+  const hour = Number(match[1])
+  const minute = Number(match[2])
+  const period = match[3]?.toUpperCase()
+
+  if (hour < 1 || hour > 12 || minute > 59) return time
+
+  const hour24 = (hour % 12) + (period === 'PM' ? 12 : 0)
+  return `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+}
+
+export function formatWeddingTime(time: string, format?: WeddingTimeFormat | null): string {
+  if (format === 'TWELVE_HOUR') return formatTime12Hour(time)
+  if (format === 'TWENTY_FOUR_HOUR') return formatTime24Hour(time)
+  return time
+}
+
 // format: 01.24.2024
 function formatDateNumber(date: Date | null | undefined) {
   if (!date) return
@@ -167,7 +232,7 @@ export {
   formatDateHTML5,
   formatDateNumber,
   formatDateStandard,
+  formatTime12Hour,
   generateRandomColor,
   generateTimes,
-  formatTime12Hour,
 }

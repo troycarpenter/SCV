@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { formatCoupleNames } from '~/app/utils/helpers'
 
 import { loadVisitorWedding } from '~/app/w/[websiteSubUrl]/_lib/load-visitor-wedding'
 import { grantWebsiteAccess } from '~/app/w/[websiteSubUrl]/_lib/website-access'
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: InvitationPageProps): Promise
   return {
     title:
       loadResult.status === 'ready'
-        ? `Invitation — ${loadResult.weddingData.groomFirstName} & ${loadResult.weddingData.brideFirstName}`
+        ? `Invitation — ${formatCoupleNames(loadResult.weddingData)}`
         : 'Invitation',
   }
 }

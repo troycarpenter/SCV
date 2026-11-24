@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { formatCoupleNames } from '~/app/utils/helpers'
 import { AddToCalendarButtons } from '~/components/website/add-to-calendar-buttons'
 import { buildSaveTheDateCalendarLinks } from '~/lib/website/calendar'
 import { ClassicHeaderImage } from '~/templates/classic/components/media'
@@ -8,7 +9,7 @@ export function ClassicSaveTheDate({ weddingData, path }: Readonly<TemplateSurfa
   const weddingEvent = weddingData.events.find((event) => event.name === 'Wedding Day')
   const venue = weddingEvent?.venue
   const copy = weddingData.saveTheDate
-  const coupleNames = `${weddingData.groomFirstName} & ${weddingData.brideFirstName}`
+  const coupleNames = formatCoupleNames(weddingData)
   const calendarLinks = buildSaveTheDateCalendarLinks({
     title: `${coupleNames} Wedding`,
     description: `Save the date for the wedding of ${coupleNames}! Formal invitation to follow. ${weddingData.website.url}`,

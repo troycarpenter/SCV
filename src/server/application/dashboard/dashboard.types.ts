@@ -4,6 +4,7 @@
  * Types for the dashboard overview data that aggregates multiple domains.
  */
 
+import type { WeddingNameOrder, WeddingTimeFormat } from '@prisma/client'
 import type { Gift } from '~/server/domains/gift'
 import type { GuestWithInvitations } from '~/server/domains/guest'
 import type { Household } from '~/server/domains/household'
@@ -23,6 +24,8 @@ export type WeddingDate = {
  * Wedding data for dashboard header
  */
 export type WeddingData = {
+  nameOrder?: WeddingNameOrder
+  timeFormat?: WeddingTimeFormat
   website?: WebsiteWithQuestions
   groomFirstName: string | null
   groomLastName: string | null
