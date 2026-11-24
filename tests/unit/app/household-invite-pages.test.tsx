@@ -209,6 +209,35 @@ describe('household invite pages', () => {
     expect(screen.getByRole('button', { name: /download \.ics file/i })).toBeInTheDocument()
   })
 
+  it('shows the RSVP link only when RSVP is enabled', async () => {
+    mockCookieGet.mockReturnValue({ value: 'cookie-token' })
+    mockGetInviteData.mockResolvedValue({ ...inviteData, isRsvpEnabled: true })
+    const InvitePage = (await import('~/app/w/[websiteSubUrl]/save-the-date/page')).default
+
+    const { unmount } = render(
+      await InvitePage({
+        params: Promise.resolve({ websiteSubUrl: 'harry-and-hermione' }),
+        searchParams: Promise.resolve({}),
+      })
+    )
+
+    expect(screen.getByRole('link', { name: /sendRsvp/i })).toHaveAttribute(
+      'href',
+      '/w/harry-and-hermione/rsvp'
+    )
+    unmount()
+
+    mockGetInviteData.mockResolvedValue({ ...inviteData, isRsvpEnabled: false })
+    render(
+      await InvitePage({
+        params: Promise.resolve({ websiteSubUrl: 'harry-and-hermione' }),
+        searchParams: Promise.resolve({}),
+      })
+    )
+
+    expect(screen.queryByRole('link', { name: /sendRsvp/i })).not.toBeInTheDocument()
+  })
+
   it('themes the invite card with the chosen template and the couple’s Save the Date copy', async () => {
     mockCookieGet.mockReturnValue({ value: 'cookie-token' })
     mockGetInviteData.mockResolvedValue({

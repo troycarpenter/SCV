@@ -203,6 +203,7 @@ describe('HouseholdInviteService', () => {
     db.website.findFirst.mockResolvedValue({
       weddingId: 'wedding-123',
       templateId: 'aurelia',
+      isRsvpEnabled: true,
       websiteSections: [
         {
           isEnabled: true,
@@ -217,6 +218,7 @@ describe('HouseholdInviteService', () => {
     const inviteData = await service.getInviteData('harry-and-hermione', code)
 
     expect(inviteData?.templateId).toBe('aurelia')
+    expect(inviteData?.isRsvpEnabled).toBe(true)
     expect(inviteData?.saveTheDate).toEqual({
       eyebrow: "You're Invited",
       message: 'Join us in Puebla.',
@@ -237,6 +239,7 @@ describe('HouseholdInviteService', () => {
     const inviteData = await service.getInviteData('harry-and-hermione', code)
 
     expect(inviteData?.templateId).toBeNull()
+    expect(inviteData?.isRsvpEnabled).toBe(false)
     expect(inviteData?.saveTheDate).toBeUndefined()
   })
 
