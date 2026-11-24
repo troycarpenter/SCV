@@ -82,10 +82,18 @@ describe('auth email verification config', () => {
   it('routes core verification emails through the OTP plugin', async () => {
     const options = config.plugins.find((plugin) => plugin.id === 'email-otp-plugin')?.options as {
       overrideDefaultEmailVerification: boolean
+      otpLength: number
+      expiresIn: number
+      disableSignUp: boolean
       sendVerificationOTP: (data: { email: string; otp: string; type: string }) => Promise<void>
     }
 
-    expect(options.overrideDefaultEmailVerification).toBe(true)
+    expect(options).toMatchObject({
+      overrideDefaultEmailVerification: true,
+      otpLength: 6,
+      expiresIn: 600,
+      disableSignUp: false,
+    })
 
     await options.sendVerificationOTP({
       email: 'new@example.com',
