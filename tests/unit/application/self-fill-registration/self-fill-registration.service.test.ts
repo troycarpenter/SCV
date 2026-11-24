@@ -116,6 +116,18 @@ describe('SelfFillRegistrationService', () => {
       )
     })
 
+    it('should trim and persist household notes', async () => {
+      await service.registerGuest(validToken, {
+        ...validGuestInput,
+        notes: '  Other household members: Jane and Sam  ',
+      })
+
+      expect(mockCreateWithGiftsFn).toHaveBeenCalledWith(
+        expect.objectContaining({ notes: 'Other household members: Jane and Sam' }),
+        expect.arrayContaining(['event-123', 'event-456'])
+      )
+    })
+
     it('should create the guest as primary contact with ADULT age group', async () => {
       await service.registerGuest(validToken, validGuestInput)
 

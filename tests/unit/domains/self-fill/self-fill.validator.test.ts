@@ -75,6 +75,25 @@ describe('selfFillGuestSchema', () => {
     expect(result.success).toBe(true)
   })
 
+  it('should trim household notes', () => {
+    const result = selfFillGuestSchema.safeParse({
+      ...validInput,
+      notes: '  Other household members: Jane and Sam  ',
+    })
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.notes).toBe('Other household members: Jane and Sam')
+  })
+
+  it('should accept household notes at the 1000-character limit', () => {
+    const result = selfFillGuestSchema.safeParse({ ...validInput, notes: 'N'.repeat(1000) })
+    expect(result.success).toBe(true)
+  })
+
+  it('should reject household notes exceeding 1000 characters', () => {
+    const result = selfFillGuestSchema.safeParse({ ...validInput, notes: 'N'.repeat(1001) })
+    expect(result.success).toBe(false)
+  })
+
   // Token validation (same rules as getByTokenSchema)
   it('should reject missing token', () => {
     const { token: _, ...rest } = validInput

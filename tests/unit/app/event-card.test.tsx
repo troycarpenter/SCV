@@ -44,6 +44,7 @@ describe('EventCard', () => {
 
     expect(screen.getByText('Ceremony')).toBeInTheDocument()
     expect(screen.getByText('Main Hall')).toBeInTheDocument()
+    expect(screen.getByText('May 17th, 2027')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: /manage guests|guests/i }))
     expect(onManageGuests).toHaveBeenCalledWith('evt-1')

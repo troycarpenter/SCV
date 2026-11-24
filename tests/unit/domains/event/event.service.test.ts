@@ -101,7 +101,7 @@ describe('EventService', () => {
         data: expect.objectContaining({
           name: 'Wedding Day',
           weddingId: 'wedding-123',
-          date: expect.any(Date),
+          date: new Date('2024-06-15T00:00:00.000Z'),
           startTime: '14:00',
           endTime: '16:00',
           venue: 'Beautiful Garden',
@@ -316,9 +316,15 @@ describe('EventService', () => {
       const result = await eventService.updateEvent(actorContext, 'wedding-123', {
         eventId: 'event-123',
         eventName: 'Updated Event',
+        date: '2024-06-15',
       })
 
       expect(result.name).toBe('Updated Event')
+      expect(mockEventUpdateFn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ date: new Date('2024-06-15T00:00:00.000Z') }),
+        })
+      )
       expect(mockRequirePermission).toHaveBeenCalledWith(actorContext, {
         event: ['update'],
       })

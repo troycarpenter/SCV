@@ -577,7 +577,7 @@ describe('DashboardService', () => {
       const result = await getOverview()
 
       expect(result?.weddingData.date).toBeDefined()
-      expect(result?.weddingData.date.standardFormat).toContain('2025')
+      expect(result?.weddingData.date.standardFormat).toContain('Jun 15, 2025')
     })
 
     it('should calculate days remaining', async () => {
@@ -684,7 +684,7 @@ describe('DashboardService', () => {
       const result = await getOverview()
 
       expect(result?.weddingData.location).toBe('Beach Resort')
-      expect(result?.weddingData.date.standardFormat).toContain('2025')
+      expect(result?.weddingData.date.standardFormat).toContain('Jun 15, 2025')
     })
 
     it('should handle empty households', async () => {
