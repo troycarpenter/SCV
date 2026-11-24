@@ -15,21 +15,17 @@ const EMAIL_VERIFICATION_PATH = '/auth/email-verification'
 // The auth UI navigates to the OTP step without the current query string, which drops
 // `redirectTo` (e.g. an organization invite to accept after sign-up). Carry it over so the
 // user still lands where they were headed once verification succeeds.
-function withRedirectTo(path: string): string {
-  if (typeof window === 'undefined' || !path.startsWith(EMAIL_VERIFICATION_PATH)) {
-    return path
-  }
+const AUTH_HANDOFF_PARAMS = ['redirectTo', 'callbackUrl'] as const
 
-  const redirectTo = new URLSearchParams(window.location.search).get('redirectTo')
-  if (!redirectTo) {
-    return path
-  }
-
+function withAuthRedirects(path: string): string {
+  if (typeof window === 'undefined') return path
   const url = new URL(path, window.location.origin)
-  if (!url.searchParams.has('redirectTo')) {
-    url.searchParams.set('redirectTo', redirectTo)
+  if (url.pathname !== EMAIL_VERIFICATION_PATH) return path
+  const currentParams = new URLSearchParams(window.location.search)
+  for (const key of AUTH_HANDOFF_PARAMS) {
+    const value = currentParams.get(key)
+    if (value && !url.searchParams.has(key)) url.searchParams.set(key, value)
   }
-
   return `${url.pathname}${url.search}`
 }
 
@@ -48,20 +44,17 @@ export function Providers({
       <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
         <AuthUIProvider
           authClient={authClient}
-
           navigate={(path) => {
             // Better Auth UI sends unverified signups to sign-in because no session token exists.
             // Route that specific signup outcome to our custom email verification form.
-            if (path.startsWith('/auth/sign-in') && !path.includes('notice=')) {
-              const search = window.location.search
-              router.push(`${EMAIL_VERIFICATION_PATH}${search}`)
+            if (path.startsWith('/auth/sign-in') && window.location.pathname === '/auth/sign-up') {
+              router.push(withAuthRedirects(EMAIL_VERIFICATION_PATH))
               return
             }
 
-            router.push(withRedirectTo(path))
+            router.push(withAuthRedirects(path))
           }}
           replace={(path) => router.replace(path)}
-
           onSessionChange={() => {
             router.refresh()
           }}

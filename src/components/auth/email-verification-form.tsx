@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -14,7 +14,24 @@ type AuthResult = {
   error?: { message?: string } | null
 }
 
-export function EmailVerificationForm() {
+type EmailVerificationFormProps = {
+  redirectTo?: string
+  callbackUrl?: string
+}
+
+function getPostVerificationDestination(redirectTo?: string, callbackUrl?: string): string {
+  const target = redirectTo || callbackUrl
+  if (!target?.startsWith('/') || target.startsWith('//')) return '/'
+  try {
+    const url = new URL(target, 'https://internal.invalid')
+    if (url.origin !== 'https://internal.invalid' || url.pathname.startsWith('//')) return '/'
+    return `${url.pathname}${url.search}${url.hash}`
+  } catch {
+    return '/'
+  }
+}
+
+export function EmailVerificationForm({ redirectTo, callbackUrl }: EmailVerificationFormProps) {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
@@ -48,7 +65,7 @@ export function EmailVerificationForm() {
         throw new Error('The verification code could not be confirmed.')
       }
 
-      router.replace('/auth/sign-in?notice=verified')
+      router.replace(getPostVerificationDestination(redirectTo, callbackUrl))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Verification failed.')
     } finally {
@@ -84,66 +101,70 @@ export function EmailVerificationForm() {
   }
 
   return (
-    <section className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-      <h1 className="text-xl font-semibold">Verify your email</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
+    <section className='w-full max-w-sm rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-sm'>
+      <h1 className='font-semibold text-xl'>Verify your email</h1>
+      <p className='mt-2 text-muted-foreground text-sm'>
         Enter the email address you registered with and the six-digit code we sent you.
       </p>
 
-      <form onSubmit={verifyEmail} className="mt-6 space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="verification-email">Email address</Label>
+      <form onSubmit={verifyEmail} className='mt-6 space-y-4'>
+        <div className='space-y-2'>
+          <Label htmlFor='verification-email'>Email address</Label>
           <Input
-            id="verification-email"
-            type="email"
-            autoComplete="email"
+            id='verification-email'
+            type='email'
+            autoComplete='email'
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="you@example.com"
+            placeholder='you@example.com'
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="verification-otp">Verification code</Label>
+        <div className='space-y-2'>
+          <Label htmlFor='verification-otp'>Verification code</Label>
           <Input
-            id="verification-otp"
-            type="text"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            pattern="[0-9]{6}"
+            id='verification-otp'
+            type='text'
+            inputMode='numeric'
+            autoComplete='one-time-code'
+            pattern='[0-9]{6}'
             maxLength={6}
             required
             value={otp}
             onChange={(event) => setOtp(event.target.value.replace(/\D/g, '').slice(0, 6))}
-            placeholder="123456"
+            placeholder='123456'
           />
         </div>
 
         {error ? (
-          <p role="alert" className="text-sm text-destructive">{error}</p>
+          <p role='alert' className='text-destructive text-sm'>
+            {error}
+          </p>
         ) : null}
         {message ? (
-          <p role="status" className="text-sm text-muted-foreground">{message}</p>
+          <p role='status' className='text-muted-foreground text-sm'>
+            {message}
+          </p>
         ) : null}
 
-        <Button type="submit" className="w-full" disabled={isVerifying || isResending}>
+        <Button type='submit' className='w-full' disabled={isVerifying || isResending}>
           {isVerifying ? 'Verifying…' : 'Verify email'}
         </Button>
       </form>
 
       <Button
-        type="button"
-        variant="outline"
-        className="mt-3 w-full"
+        type='button'
+        variant='outline'
+        className='mt-3 w-full'
         onClick={resendCode}
         disabled={isVerifying || isResending}
       >
         {isResending ? 'Sending…' : 'Resend verification code'}
       </Button>
 
-      <p className="mt-5 text-center text-sm text-muted-foreground">
-        <Link href="/auth/sign-in" className="text-primary underline underline-offset-4">
+      <p className='mt-5 text-center text-muted-foreground text-sm'>
+        <Link href='/auth/sign-in' className='text-primary underline underline-offset-4'>
           Back to sign in
         </Link>
       </p>
