@@ -214,13 +214,18 @@ describe('organization plugin wiring', () => {
     expect(resolveAuthClientBaseUrl()).toBe('http://localhost:3000')
   })
 
-  it('trusts the current request origin for auth callbacks and form posts', () => {
-    expect(resolveTrustedOrigins('http://localhost:3001/api/auth/sign-in/email')).toContain(
-      'http://localhost:3001'
-    )
-    expect(
-      resolveTrustedOrigins('https://preview.example.com/api/auth/sign-in/email')
-    ).not.toContain('https://preview.example.com')
+  it('trusts local browser origins for auth callbacks and form posts', () => {
+    const localRequest = {
+      headers: { get: (name: string) => (name === 'origin' ? 'http://localhost:3000' : null) },
+    }
+    expect(resolveTrustedOrigins(localRequest)).toContain('http://localhost:3000')
+
+    const previewRequest = {
+      headers: {
+        get: (name: string) => (name === 'origin' ? 'https://preview.example.com' : null),
+      },
+    }
+    expect(resolveTrustedOrigins(previewRequest)).not.toContain('https://preview.example.com')
   })
 
   it('builds organization invitation accept urls without extra redirect params', async () => {
