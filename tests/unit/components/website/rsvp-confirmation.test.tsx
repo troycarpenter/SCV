@@ -18,7 +18,7 @@ describe('RsvpConfirmation', () => {
       weddingData: {
         groomFirstName: 'Alex',
         brideFirstName: 'Jordan',
-        nameOrder: 'GROOM_FIRST',
+        nameOrder: 'BRIDE_FIRST',
         events: [],
       },
       rsvpResponses: [],
@@ -37,6 +37,8 @@ describe('RsvpConfirmation', () => {
   it('uses the configured couple-name order in the confirmation heading', () => {
     render(<RsvpConfirmation basePath='/wedding' setCurrentStep={jest.fn()} />)
 
-    expect(screen.getByRole('heading', { name: 'confirmationTitle Alex & Jordan' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'confirmationTitle Jordan & Alex' })
+    ).toBeInTheDocument()
   })
 })
