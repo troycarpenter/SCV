@@ -59,7 +59,7 @@
     "sendEmailConfirmation": "Send me an RSVP confirmation by email",
     "emailPlaceholder": "Email",
     "sendRsvp": "SEND RSVP",
-    "confirmationTitle": ""all set! here's what we sent {coupleNames}",
+    "confirmationTitle": "all set! here's what we sent {coupleNames}",
     "backToHomepage": "BACK TO HOMEPAGE",
     "yourRsvpResponse": "Your RSVP Response",
     "updateResponse": "Update Response"
