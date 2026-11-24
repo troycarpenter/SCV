@@ -67,8 +67,24 @@ export function formatCoupleInitials(wedding: CoupleNameInput): string {
     .join(' & ')
 }
 
+function formatTime24Hour(time: string): string {
+  const match = time.match(/^(\\d{1,2}):(\\d{2})\\s*(AM|PM)$/i)
+  if (!match) return time
+
+  const hour = Number(match[1])
+  const minute = Number(match[2])
+  const period = match[3]?.toUpperCase()
+
+  if (hour < 1 || hour > 12 || minute > 59) return time
+
+  const hour24 = (hour % 12) + (period === 'PM' ? 12 : 0)
+  return `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+}
+
 export function formatWeddingTime(time: string, format?: WeddingTimeFormat | null): string {
-  return format === 'TWELVE_HOUR' ? formatTime12Hour(time) : time
+  if (format === 'TWELVE_HOUR') return formatTime12Hour(time)
+  if (format === 'TWENTY_FOUR_HOUR') return formatTime24Hour(time)
+  return time
 }
 
 // format: 01.24.2024
