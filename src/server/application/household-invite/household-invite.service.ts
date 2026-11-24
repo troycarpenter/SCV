@@ -37,10 +37,6 @@ export type UpdateHouseholdInviteInput = {
   guests: HouseholdInviteGuestInput[]
 }
 
-// The primary wedding date and venue live on the event named "Wedding Day"
-// (see website-management.service.ts), not on the Wedding record itself.
-const WEDDING_DAY_EVENT_NAME = 'Wedding Day'
-
 export type HouseholdInviteData = {
   weddingId: string
   expiresAt: Date
@@ -269,8 +265,7 @@ export class HouseholdInviteService {
             brideFirstName: true,
             nameOrder: true,
             events: {
-              where: { name: WEDDING_DAY_EVENT_NAME },
-              orderBy: { date: 'asc' },
+              orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
               take: 1,
               select: { date: true, venue: true },
             },
@@ -281,13 +276,13 @@ export class HouseholdInviteService {
 
     if (!website) return null
 
-    const weddingDayEvent = website.wedding.events[0]
+    const weddingEvent = website.wedding.events[0]
     return {
       groomFirstName: website.wedding.groomFirstName,
       brideFirstName: website.wedding.brideFirstName,
       nameOrder: website.wedding.nameOrder,
-      date: weddingDayEvent?.date ?? null,
-      venue: weddingDayEvent?.venue ?? null,
+      date: weddingEvent?.date ?? null,
+      venue: weddingEvent?.venue ?? null,
     }
   }
 
@@ -544,7 +539,7 @@ export class HouseholdInviteService {
               nameOrder: true,
               brideLastName: true,
               events: {
-                orderBy: { date: 'asc' },
+                orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
                 select: { name: true, date: true, venue: true },
               },
             },
@@ -581,9 +576,9 @@ export class HouseholdInviteService {
     if (!household) return null
 
     const { events, ...weddingNames } = household.wedding
-    // The primary date/venue come from the "Wedding Day" event; the full event
-    // list drives the save-the-date calendar block.
-    const weddingDayEvent = events.find((event) => event.name === WEDDING_DAY_EVENT_NAME)
+    // The first-created event supplies the wedding date and venue; all events
+    // remain available for the save-the-date calendar block.
+    const weddingEvent = events[0]
 
     // Mirror the website surfaces: only enabled Save the Date copy overrides the
     // template defaults, and malformed stored content is ignored rather than thrown.
@@ -601,8 +596,8 @@ export class HouseholdInviteService {
       saveTheDate,
       wedding: {
         ...weddingNames,
-        date: weddingDayEvent?.date ?? null,
-        venue: weddingDayEvent?.venue ?? null,
+        date: weddingEvent?.date ?? null,
+        venue: weddingEvent?.venue ?? null,
       },
       events,
       household: {
