@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import type { AnchorHTMLAttributes } from 'react'
 import { buildSaveTheDateCalendarLinks } from '~/lib/website/calendar'
 import { VoyageSaveTheDate } from '~/templates/voyage/components/save-the-date'
 import type { WeddingPageData } from '~/server/domains/website/website.types'
@@ -9,7 +10,7 @@ jest.mock('next/link', () => ({
     href,
     children,
     ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a href={href} {...props}>
       {children}
     </a>
