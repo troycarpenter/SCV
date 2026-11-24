@@ -137,7 +137,10 @@ describe('HouseholdInviteService', () => {
         groomFirstName: 'Diego',
         brideFirstName: 'Laura',
         nameOrder: 'GROOM_FIRST',
-        events: [{ date: weddingDate, venue: 'Puebla, Mexico' }],
+        events: [
+          { date: weddingDate, venue: 'First-created event venue' },
+          { date: new Date('2027-05-29T12:00:00.000Z'), venue: 'Wedding Day venue' },
+        ],
       },
     })
     const service = new HouseholdInviteService(db as never)
@@ -147,7 +150,7 @@ describe('HouseholdInviteService', () => {
       brideFirstName: 'Laura',
       nameOrder: 'GROOM_FIRST',
       date: weddingDate,
-      venue: 'Puebla, Mexico',
+      venue: 'First-created event venue',
     })
     expect(db.website.findFirst).toHaveBeenCalledWith({
       where: { subUrl: 'harry-and-hermione' },
@@ -158,8 +161,7 @@ describe('HouseholdInviteService', () => {
             brideFirstName: true,
             nameOrder: true,
             events: {
-              where: { name: 'Wedding Day' },
-              orderBy: { date: 'asc' },
+              orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
               take: 1,
               select: { date: true, venue: true },
             },
@@ -169,14 +171,17 @@ describe('HouseholdInviteService', () => {
     })
   })
 
-  it('falls back to null date and venue when the wedding has no Wedding Day event', async () => {
+  it('uses null date and venue when the first-created event has neither, even if a later Wedding Day event does', async () => {
     const db = createDb()
     db.website.findFirst.mockResolvedValue({
       wedding: {
         groomFirstName: 'Diego',
         brideFirstName: 'Laura',
         nameOrder: 'BRIDE_FIRST',
-        events: [],
+        events: [
+          { date: null, venue: null },
+          { date: new Date('2027-05-30T12:00:00.000Z'), venue: 'Wedding Day venue' },
+        ],
       },
     })
     const service = new HouseholdInviteService(db as never)
@@ -223,6 +228,75 @@ describe('HouseholdInviteService', () => {
       eyebrow: "You're Invited",
       message: 'Join us in Puebla.',
     })
+  })
+
+  it('uses the first-created event for wedding details while retaining every event for the calendar', async () => {
+    const firstEvent = {
+      name: 'Welcome Dinner',
+      date: new Date('2027-06-14T12:00:00.000Z'),
+      venue: 'First-created venue',
+    }
+    const laterWeddingDay = {
+      name: 'Wedding Day',
+      date: new Date('2027-06-12T12:00:00.000Z'),
+      venue: 'Wedding Day venue',
+    }
+    const db = createDb()
+    db.website.findFirst.mockResolvedValue({ weddingId: 'wedding-123', templateId: null })
+    db.household.findFirst.mockResolvedValue({
+      ...inviteHousehold,
+      wedding: {
+        ...inviteHousehold.wedding,
+        events: [firstEvent, laterWeddingDay],
+      },
+    })
+    const service = new HouseholdInviteService(db as never)
+
+    const inviteData = await service.getInviteData('harry-and-hermione', INVITE_CODE)
+
+    expect(inviteData?.wedding).toMatchObject({
+      date: firstEvent.date,
+      venue: firstEvent.venue,
+    })
+    expect(inviteData?.events).toEqual([firstEvent, laterWeddingDay])
+    expect(db.household.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({
+        select: expect.objectContaining({
+          wedding: expect.objectContaining({
+            select: expect.objectContaining({
+              events: {
+                orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+                select: { name: true, date: true, venue: true },
+              },
+            }),
+          }),
+        }),
+      })
+    )
+  })
+
+  it('keeps the full event list when the first-created event has no date or venue', async () => {
+    const firstEvent = { name: 'Welcome Dinner', date: null, venue: null }
+    const laterWeddingDay = {
+      name: 'Wedding Day',
+      date: new Date('2027-06-12T12:00:00.000Z'),
+      venue: 'Wedding Day venue',
+    }
+    const db = createDb()
+    db.website.findFirst.mockResolvedValue({ weddingId: 'wedding-123', templateId: null })
+    db.household.findFirst.mockResolvedValue({
+      ...inviteHousehold,
+      wedding: {
+        ...inviteHousehold.wedding,
+        events: [firstEvent, laterWeddingDay],
+      },
+    })
+    const service = new HouseholdInviteService(db as never)
+
+    const inviteData = await service.getInviteData('harry-and-hermione', INVITE_CODE)
+
+    expect(inviteData?.wedding).toMatchObject({ date: null, venue: null })
+    expect(inviteData?.events).toEqual([firstEvent, laterWeddingDay])
   })
 
   it('ignores Save the Date copy that is present but disabled', async () => {

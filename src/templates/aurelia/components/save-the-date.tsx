@@ -8,8 +8,7 @@ import type { TemplateSurfaceProps } from '~/templates/types'
 const headingFont = 'font-[family-name:var(--tpl-heading-font)]'
 
 export function AureliaSaveTheDate({ weddingData, path }: Readonly<TemplateSurfaceProps>) {
-  const weddingEvent = weddingData.events.find((event) => event.name === 'Wedding Day')
-  const venue = weddingEvent?.venue
+  const venue = weddingData.events[0]?.venue
   const copy = weddingData.saveTheDate
   const coupleNames = formatCoupleNames(weddingData)
   const [firstPartner, secondPartner] = getCoupleNameOrder(weddingData)
