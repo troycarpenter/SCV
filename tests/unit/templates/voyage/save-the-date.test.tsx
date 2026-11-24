@@ -1,16 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import type { AnchorHTMLAttributes } from 'react'
 import { buildSaveTheDateCalendarLinks } from '~/lib/website/calendar'
-import { VoyageSaveTheDate } from '~/templates/voyage/components/save-the-date'
 import type { WeddingPageData } from '~/server/domains/website/website.types'
+import { VoyageSaveTheDate } from '~/templates/voyage/components/save-the-date'
 
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({
-    href,
-    children,
-    ...props
-  }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  default: ({ href, children, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a href={href} {...props}>
       {children}
     </a>
@@ -83,10 +79,7 @@ describe('VoyageSaveTheDate', () => {
     ]
     const data = {
       ...weddingData,
-      events: [
-        { ...events[0], name: 'Welcome Dinner', venue: 'The First Venue' },
-        events[1],
-      ],
+      events: [{ ...events[0], name: 'Welcome Dinner', venue: 'The First Venue' }, events[1]],
     } as WeddingPageData
 
     render(<VoyageSaveTheDate weddingData={data} path='/w/alex-jordan' />)
