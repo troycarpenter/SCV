@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 
 import SidebarNavFrame from '~/components/nav/sidebar-nav'
 import { signOut } from '~/lib/auth-client'
@@ -29,11 +29,15 @@ describe('SidebarNavFrame', () => {
     useWorkspace.mockReset()
     useWorkspace.mockReturnValue({
       workspace: {
+        organizationId: 'org-1',
         role: 'admin',
         capabilities: {
           canViewPlanning: true,
         },
       },
+      workspaces: [],
+      switchWorkspace: jest.fn(),
+      isSwitchingWorkspace: false,
     })
     localStorage.clear()
   })
@@ -91,6 +95,45 @@ describe('SidebarNavFrame', () => {
     fireEvent.click(screen.getByRole('button', { name: /close menu/i }))
 
     expect(setIsOpen).toHaveBeenCalledWith(false)
+  })
+
+  it('allows switching weddings from the mobile drawer', () => {
+    const switchWorkspace = jest.fn()
+    useWorkspace.mockReturnValue({
+      workspace: {
+        organizationId: 'org-1',
+        role: 'admin',
+        capabilities: {
+          canViewPlanning: true,
+        },
+      },
+      workspaces: [
+        { organizationId: 'org-1', displayName: 'Holly & Diego', isActive: true },
+        { organizationId: 'org-2', displayName: 'Maya & Noah', isActive: false },
+      ],
+      switchWorkspace,
+      isSwitchingWorkspace: false,
+    })
+
+    render(
+      <SidebarNavFrame
+        isOpen
+        setIsOpen={jest.fn()}
+        coupleName='Holly & Diego'
+      />
+    )
+
+    const mobileDrawer = screen.getByRole('dialog', { name: 'Navigation menu' })
+    const selector = within(mobileDrawer).getByRole('combobox', { name: 'Switch wedding' })
+
+    expect(selector).toHaveValue('org-1')
+
+    fireEvent.change(selector, { target: { value: 'org-2' } })
+
+    expect(switchWorkspace).toHaveBeenCalledWith(
+      { organizationId: 'org-2' },
+      { onSuccess: expect.any(Function) }
+    )
   })
 
   it('positions mobile close button away from header divider', () => {
