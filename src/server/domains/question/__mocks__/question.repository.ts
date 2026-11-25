@@ -82,6 +82,7 @@ export const mockFindMostRecentAnswerByQuestionId = jest.fn()
 export const mockBelongsToWedding = jest.fn()
 export const mockEventBelongsToWedding = jest.fn()
 export const mockWebsiteBelongsToWedding = jest.fn()
+export const mockOptionBelongsToQuestion = jest.fn()
 export const mockFindOptionResponse = jest.fn()
 export const mockDeleteOptionResponse = jest.fn()
 export const mockUpsertOptionResponse = jest.fn()
@@ -102,6 +103,7 @@ export const QuestionRepository = jest.fn().mockImplementation(() => ({
   belongsToWedding: mockBelongsToWedding,
   eventBelongsToWedding: mockEventBelongsToWedding,
   websiteBelongsToWedding: mockWebsiteBelongsToWedding,
+  optionBelongsToQuestion: mockOptionBelongsToQuestion,
   findOptionResponse: mockFindOptionResponse,
   deleteOptionResponse: mockDeleteOptionResponse,
   upsertOptionResponse: mockUpsertOptionResponse,
@@ -124,6 +126,7 @@ export const resetMocks = (): void => {
   mockBelongsToWedding.mockReset()
   mockEventBelongsToWedding.mockReset()
   mockWebsiteBelongsToWedding.mockReset()
+  mockOptionBelongsToQuestion.mockReset()
   mockFindOptionResponse.mockReset()
   mockDeleteOptionResponse.mockReset()
   mockUpsertOptionResponse.mockReset()
