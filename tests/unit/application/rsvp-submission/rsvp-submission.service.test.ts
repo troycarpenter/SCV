@@ -37,6 +37,7 @@ import {
   mockDeleteAnswer,
   mockDeleteOptionResponse,
   mockFindOptionResponse,
+  mockOptionBelongsToQuestion,
   mockUpsertAnswer,
   mockUpsertOptionResponse,
   QuestionRepository,
@@ -87,6 +88,8 @@ describe('RsvpSubmissionService', () => {
     mockHouseholdCountByIdsInWedding.mockResolvedValue(1)
     mockFindWeddingIdByValidTokenAndSubUrl.mockResolvedValue('wedding-123')
     mockFindOptionResponse.mockResolvedValue(null)
+    mockBelongsToWedding.mockResolvedValue(true)
+    mockOptionBelongsToQuestion.mockResolvedValue(true)
 
     const invitationRepo = new InvitationRepository({} as never)
     const questionRepo = new QuestionRepository({} as never)
@@ -359,6 +362,108 @@ describe('RsvpSubmissionService', () => {
       })
     ).rejects.toMatchObject({ code: 'FORBIDDEN' })
 
+    expect(mockDb.$transaction).not.toHaveBeenCalled()
+  })
+
+  it('rejects managed RSVP answers for questions outside the active wedding', async () => {
+    mockBelongsToWedding.mockResolvedValue(false)
+
+    await expect(
+      service.submitManagedRsvp(actorContext, 'wedding-123', {
+        rsvpResponses: [],
+        answersToQuestions: [
+          {
+            questionId: 'question-from-another-wedding',
+            questionType: 'Text',
+            response: 'Private answer',
+            guestId: 1,
+            householdId: 'household-123',
+          },
+        ],
+      })
+    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+
+    expect(mockBelongsToWedding).toHaveBeenCalledWith(
+      'question-from-another-wedding',
+      'wedding-123'
+    )
+    expect(mockDb.$transaction).not.toHaveBeenCalled()
+  })
+
+  it('rejects managed RSVP option answers when the option belongs to another question', async () => {
+    mockOptionBelongsToQuestion.mockResolvedValue(false)
+
+    await expect(
+      service.submitManagedRsvp(actorContext, 'wedding-123', {
+        rsvpResponses: [],
+        answersToQuestions: [
+          {
+            questionId: 'question-123',
+            questionType: 'Option',
+            response: 'option-from-another-question',
+            guestId: 1,
+            householdId: 'household-123',
+          },
+        ],
+      })
+    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+
+    expect(mockOptionBelongsToQuestion).toHaveBeenCalledWith(
+      'option-from-another-question',
+      'question-123'
+    )
+    expect(mockDb.$transaction).not.toHaveBeenCalled()
+  })
+
+  it('rejects public RSVP answers for questions outside the website wedding', async () => {
+    mockBelongsToWedding.mockResolvedValue(false)
+
+    await expect(
+      service.submitPublicRsvp({
+        subUrl: 'ash-and-jamie',
+        rsvpResponses: [],
+        answersToQuestions: [
+          {
+            questionId: 'question-from-another-wedding',
+            questionType: 'Text',
+            response: 'Private answer',
+            guestId: 1,
+            householdId: 'household-123',
+          },
+        ],
+      })
+    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+
+    expect(mockBelongsToWedding).toHaveBeenCalledWith(
+      'question-from-another-wedding',
+      'wedding-123'
+    )
+    expect(mockDb.$transaction).not.toHaveBeenCalled()
+  })
+
+  it('rejects public RSVP option answers when the option belongs to another question', async () => {
+    mockOptionBelongsToQuestion.mockResolvedValue(false)
+
+    await expect(
+      service.submitPublicRsvp({
+        subUrl: 'ash-and-jamie',
+        rsvpResponses: [],
+        answersToQuestions: [
+          {
+            questionId: 'question-123',
+            questionType: 'Option',
+            response: 'option-from-another-question',
+            guestId: 1,
+            householdId: 'household-123',
+          },
+        ],
+      })
+    ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+
+    expect(mockOptionBelongsToQuestion).toHaveBeenCalledWith(
+      'option-from-another-question',
+      'question-123'
+    )
     expect(mockDb.$transaction).not.toHaveBeenCalled()
   })
 
