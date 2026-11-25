@@ -146,6 +146,7 @@ export const mockUpsertCategoryConfig = jest.fn()
 export const mockSaveImages = jest.fn()
 export const mockDeleteImage = jest.fn()
 export const mockSetCoverImage = jest.fn()
+export const mockImageBelongsToVendor = jest.fn()
 export const mockGetVendorImageKeys = jest.fn()
 
 export const VendorRepository = jest.fn().mockImplementation(() => ({
@@ -179,6 +180,7 @@ export const VendorRepository = jest.fn().mockImplementation(() => ({
   saveImages: mockSaveImages,
   deleteImage: mockDeleteImage,
   setCoverImage: mockSetCoverImage,
+  imageBelongsToVendor: mockImageBelongsToVendor,
   getVendorImageKeys: mockGetVendorImageKeys,
 }))
 
@@ -213,6 +215,7 @@ export const resetMocks = (): void => {
   mockSaveImages.mockReset()
   mockDeleteImage.mockReset()
   mockSetCoverImage.mockReset()
+  mockImageBelongsToVendor.mockReset()
   mockGetVendorImageKeys.mockReset()
   VendorRepository.mockClear()
 }
