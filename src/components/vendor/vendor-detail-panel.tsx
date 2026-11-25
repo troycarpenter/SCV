@@ -619,7 +619,7 @@ export function VendorDetailPanel({ vendor, currency, onClose }: VendorDetailPan
 
                     <section>
                       <SectionLabel icon={<Pencil className='h-3 w-3' />}>Scratchpad</SectionLabel>
-                      <div className='rounded-md bg-amber-50/50 p-3 dark:bg-amber-950/10 space-y-3'>
+                      <div className='space-y-3 rounded-md bg-amber-50/50 p-3 dark:bg-amber-950/10'>
                         <Textarea
                           id='vendor-scratchpad'
                           aria-label='Scratchpad notes'

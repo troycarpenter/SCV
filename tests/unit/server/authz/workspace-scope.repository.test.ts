@@ -1,4 +1,3 @@
-
 jest.mock('~/server/db', () => ({
   db: {
     $queryRaw: jest.fn(),

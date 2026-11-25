@@ -19,7 +19,7 @@ export default function NoGuestsView({ setPrefillHousehold, onImportClick }: NoG
         </span>
       </div>
       <div className='max-w-sm'>
-        <p className='font-serif text-xl text-foreground'>No guests yet</p>
+        <p className='font-serif text-foreground text-xl'>No guests yet</p>
         <p className='mt-2 font-mono text-[0.65rem] text-foreground/55 leading-relaxed tracking-wider'>
           Add guests one by one or import from a CSV. Track RSVPs, contact details, and household
           information all in one place.

@@ -24,8 +24,7 @@ export function buildSystemPrompt(
   }
 
   const { groomFirstName: groom, brideFirstName: bride, nameOrder } = ctx.wedding
-  const [firstName, secondName] =
-    nameOrder === 'GROOM_FIRST' ? [groom, bride] : [bride, groom]
+  const [firstName, secondName] = nameOrder === 'GROOM_FIRST' ? [groom, bride] : [bride, groom]
 
   if (ctx.actor === 'guest') {
     return buildConciergePrompt(firstName, secondName)

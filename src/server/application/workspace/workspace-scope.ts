@@ -1,4 +1,3 @@
-
 import type { ActiveOrganization } from '~/server/authz/authorization.types'
 import { WorkspaceScopeRepository } from '~/server/authz/workspace-scope.repository'
 import { WorkspaceScopeService } from '~/server/authz/workspace-scope.service'

@@ -36,7 +36,8 @@ type EmailOtpApi = {
   }) => Promise<unknown>
 }
 
-const appBaseUrl = env.BETTER_AUTH_URL ?? env.NEXT_PUBLIC_APP_URL ?? `http://localhost:${env.PORT ?? '3000'}`
+const appBaseUrl =
+  env.BETTER_AUTH_URL ?? env.NEXT_PUBLIC_APP_URL ?? `http://localhost:${env.PORT ?? '3000'}`
 const localTrustedHostnames = new Set(['127.0.0.1', '::1', 'localhost'])
 const staticTrustedOrigins = [
   'https://oswp.carvallo.io',

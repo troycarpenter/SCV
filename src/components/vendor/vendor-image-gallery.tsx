@@ -158,9 +158,9 @@ export function VendorImageGallery({ images, vendorId, hasWebsite }: VendorImage
       <input {...getInputProps()} />
 
       {images.length === 0 ? (
-        <div className='flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-border p-6 text-center'>
+        <div className='flex flex-col items-center gap-3 rounded-lg border-2 border-border border-dashed p-6 text-center'>
           <Camera className='h-8 w-8 text-muted-foreground/40' />
-          <p className='font-mono text-[10px] uppercase tracking-widest text-muted-foreground'>
+          <p className='font-mono text-[10px] text-muted-foreground uppercase tracking-widest'>
             No photos yet
           </p>
           <div className='flex gap-2'>
@@ -196,8 +196,8 @@ export function VendorImageGallery({ images, vendorId, hasWebsite }: VendorImage
                   sizes='(max-width: 768px) 33vw, 120px'
                 />
                 {image.isPrimary && (
-                  <div className='absolute left-1 top-1'>
-                    <span className='rounded bg-primary/80 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-primary-foreground'>
+                  <div className='absolute top-1 left-1'>
+                    <span className='rounded bg-primary/80 px-1.5 py-0.5 font-mono text-[9px] text-primary-foreground uppercase tracking-wider'>
                       Cover
                     </span>
                   </div>
@@ -234,7 +234,7 @@ export function VendorImageGallery({ images, vendorId, hasWebsite }: VendorImage
                 type='button'
                 onClick={open}
                 disabled={isUploading}
-                className='flex items-center gap-1.5 rounded-md border border-dashed border-primary/30 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider text-primary transition-colors hover:border-primary hover:bg-primary/5'
+                className='flex items-center gap-1.5 rounded-md border border-primary/30 border-dashed px-2.5 py-1.5 font-mono text-[10px] text-primary uppercase tracking-wider transition-colors hover:border-primary hover:bg-primary/5'
               >
                 <Plus className='h-3 w-3' />
                 Add photos
@@ -244,7 +244,7 @@ export function VendorImageGallery({ images, vendorId, hasWebsite }: VendorImage
                   type='button'
                   onClick={handleFindFromWebsite}
                   disabled={fetchWebsiteImages.isPending || isUploading}
-                  className='flex items-center gap-1.5 rounded-md border border-dashed border-border px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:border-primary/40 hover:bg-muted/30'
+                  className='flex items-center gap-1.5 rounded-md border border-border border-dashed px-2.5 py-1.5 font-mono text-[10px] text-muted-foreground uppercase tracking-wider transition-colors hover:border-primary/40 hover:bg-muted/30'
                 >
                   {fetchWebsiteImages.isPending ? 'Finding...' : 'Find from website'}
                 </button>

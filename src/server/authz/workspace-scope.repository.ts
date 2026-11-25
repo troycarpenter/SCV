@@ -1,11 +1,3 @@
-export type WorkspaceChoiceRow = WorkspaceScopeRow & {
-  groomFirstName: string
-  groomLastName: string
-  brideFirstName: string
-  brideLastName: string
-  nameOrder: 'BRIDE_FIRST' | 'GROOM_FIRST'
-}
-
 import { randomUUID } from 'node:crypto'
 
 import type { OrganizationRole } from '~/server/authz/wedding-organization'
@@ -17,6 +9,7 @@ export type WorkspaceChoiceRow = WorkspaceScopeRow & {
   groomLastName: string
   brideFirstName: string
   brideLastName: string
+  nameOrder: 'BRIDE_FIRST' | 'GROOM_FIRST'
 }
 
 /** A wedding created before workspaces existed, with everyone linked to it. */

@@ -118,7 +118,9 @@ describe('VendorList', () => {
     expect(cards[0]).toHaveTextContent('$3,200')
     expect(cards[1]).toHaveTextContent('Flat fee · lowest of 2 quotes')
 
-    fireEvent.click(within(cards[1]!).getByRole('button', { name: 'View details' }))
+    const secondCard = cards[1]
+    if (!secondCard) throw new Error('Expected second vendor card')
+    fireEvent.click(within(secondCard).getByRole('button', { name: 'View details' }))
     expect(screen.getByTestId('detail-panel')).toHaveTextContent('Magic Mirror Media')
   })
 

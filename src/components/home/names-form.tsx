@@ -98,7 +98,6 @@ export default function NamesForm() {
                   weddingDate: weddingDate
                     ? `${weddingDate.getFullYear()}-${String(weddingDate.getMonth() + 1).padStart(2, '0')}-${String(weddingDate.getDate()).padStart(2, '0')}`
                     : undefined,
-
                 })
               })}
               className='space-y-8'

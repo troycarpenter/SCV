@@ -57,7 +57,7 @@ export function VendorImagePicker({
         </DialogHeader>
 
         {candidates.length === 0 ? (
-          <p className='py-8 text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground'>
+          <p className='py-8 text-center font-mono text-[10px] text-muted-foreground uppercase tracking-widest'>
             No images found
           </p>
         ) : (

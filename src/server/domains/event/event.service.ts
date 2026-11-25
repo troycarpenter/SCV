@@ -52,7 +52,6 @@ export class EventService {
   private createEventCore(weddingId: string, data: CreateEventInput): Promise<Event> {
     const {
       eventName: name,
-      date,
       startTime,
       endTime,
       venue,

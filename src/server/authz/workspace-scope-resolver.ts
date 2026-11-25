@@ -1,4 +1,3 @@
-
 import type { ActiveOrganization } from '~/server/authz/authorization.types'
 
 export type WorkspaceScopeRow = {

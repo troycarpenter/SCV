@@ -50,7 +50,7 @@ export function AddToCalendarButtons({
         <CalendarPlus />
         Download .ics File
       </Button>
-      <p className="w-full text-center text-sm text-muted-foreground">
+      <p className='w-full text-center text-muted-foreground text-sm'>
         Download the .ics file to add the wedding to Apple Calendar or another calendar app.
       </p>
     </div>

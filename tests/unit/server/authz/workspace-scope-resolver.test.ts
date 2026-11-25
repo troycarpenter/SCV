@@ -1,4 +1,3 @@
-
 import { decideWorkspaceScope } from '~/server/authz/workspace-scope-resolver'
 
 describe('decideWorkspaceScope', () => {

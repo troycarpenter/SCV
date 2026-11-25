@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 
 import { householdInviteCookieName, householdInviteCookiePath } from '~/lib/website/cookies'
-import { householdInviteService } from '~/server/application/household-invite'
 import { getPublicWebsiteBaseUrl } from '~/lib/website/public-url'
+import { householdInviteService } from '~/server/application/household-invite'
 
 type HouseholdInviteCodeRouteProps = {
   params: Promise<{
@@ -14,7 +14,7 @@ type HouseholdInviteCodeRouteProps = {
 const getInviteCookieMaxAge = (expiresAt: Date) =>
   Math.max(0, Math.floor((expiresAt.getTime() - Date.now()) / 1000))
 
-export async function GET(request: Request, { params }: HouseholdInviteCodeRouteProps) {
+export async function GET(_request: Request, { params }: HouseholdInviteCodeRouteProps) {
   const { websiteSubUrl, code } = await params
   const inviteData = await householdInviteService.getInviteData(websiteSubUrl, code)
 
