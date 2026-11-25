@@ -168,6 +168,7 @@ model User {
   email         String   @unique @db.VarChar(255)
   emailVerified Boolean  @default(false)
   image         String?
+  lastActiveOrganizationId String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

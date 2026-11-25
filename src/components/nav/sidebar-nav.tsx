@@ -11,7 +11,7 @@ import {
   Users,
   Wallet,
 } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import SidebarNavContent, { type SidebarSection } from '~/components/nav/sidebar-nav-content'
 import SidebarUserAvatarButton from '~/components/nav/sidebar-user-avatar-button'
@@ -83,6 +83,10 @@ type SidebarNavProps = Readonly<{
   ettaPanelOpen?: boolean
   weddingDate?: string
   weddingLocation?: string
+  workspaces?: { organizationId: string; displayName: string; isActive: boolean }[]
+  activeOrganizationId?: string | null
+  onSwitchWorkspace?: (organizationId: string) => void
+  isSwitchingWorkspace?: boolean
   onSignOut: () => void
   onToggleEttaPanel?: () => void
   onNavClick?: () => void
@@ -100,6 +104,10 @@ function SidebarNav({
   ettaPanelOpen = false,
   weddingDate,
   weddingLocation,
+  workspaces,
+  activeOrganizationId,
+  onSwitchWorkspace,
+  isSwitchingWorkspace,
   onSignOut,
   onToggleEttaPanel,
   onNavClick,
@@ -192,6 +200,10 @@ function SidebarNav({
           coupleName={coupleName}
           weddingDate={weddingDate}
           weddingLocation={weddingLocation}
+          workspaces={workspaces}
+          activeOrganizationId={activeOrganizationId}
+          onSwitchWorkspace={onSwitchWorkspace}
+          isSwitchingWorkspace={isSwitchingWorkspace}
         />
       )}
 
@@ -225,7 +237,8 @@ export default function SidebarNavFrame(props: SidebarNavFrameProps) {
     weddingLocation,
   } = props
   const pathname = usePathname()
-  const { workspace } = useWorkspace()
+  const router = useRouter()
+  const { workspace, workspaces, switchWorkspace, isSwitchingWorkspace } = useWorkspace()
   const sidebarSections = getSidebarSections({
     role: workspace.role,
     capabilities: {
@@ -240,6 +253,19 @@ export default function SidebarNavFrame(props: SidebarNavFrameProps) {
   const resolvedCoupleName = coupleName
   const resolvedWeddingDate = weddingDate
   const resolvedWeddingLocation = weddingLocation
+
+  const handleSwitchWorkspace = (organizationId: string) => {
+    if (!organizationId || organizationId === workspace.organizationId) {
+      return
+    }
+
+    switchWorkspace(
+      { organizationId },
+      {
+        onSuccess: () => router.refresh(),
+      }
+    )
+  }
 
   useEffect(() => {
     const saved = localStorage.getItem('sidebar-collapsed') === 'true'
@@ -324,6 +350,10 @@ export default function SidebarNavFrame(props: SidebarNavFrameProps) {
           ettaPanelOpen={ettaPanelOpen}
           weddingDate={resolvedWeddingDate}
           weddingLocation={resolvedWeddingLocation}
+          workspaces={workspaces}
+          activeOrganizationId={workspace.organizationId}
+          onSwitchWorkspace={handleSwitchWorkspace}
+          isSwitchingWorkspace={isSwitchingWorkspace}
           onSignOut={handleSignOut}
           onToggleEttaPanel={onToggleEttaPanel}
           sections={sidebarSections}
@@ -355,6 +385,10 @@ export default function SidebarNavFrame(props: SidebarNavFrameProps) {
               ettaPanelOpen={ettaPanelOpen}
               weddingDate={resolvedWeddingDate}
               weddingLocation={resolvedWeddingLocation}
+              workspaces={workspaces}
+              activeOrganizationId={workspace.organizationId}
+              onSwitchWorkspace={handleSwitchWorkspace}
+              isSwitchingWorkspace={isSwitchingWorkspace}
               onSignOut={handleSignOut}
               onToggleEttaPanel={onToggleEttaPanel}
               onNavClick={() => setIsOpen(false)}
