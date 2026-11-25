@@ -19,7 +19,6 @@ export type WorkspaceChoiceRow = WorkspaceScopeRow & {
   brideLastName: string
 }
 
-
 /** A wedding created before workspaces existed, with everyone linked to it. */
 export type OrganizationlessWedding = {
   weddingId: string
