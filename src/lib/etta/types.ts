@@ -36,6 +36,7 @@ export interface EttaContext {
     groomFirstName: string
     groomLastName: string
     brideFirstName: string
+    nameOrder: 'BRIDE_FIRST' | 'GROOM_FIRST'
     brideLastName: string
   }
   guestCount: number
