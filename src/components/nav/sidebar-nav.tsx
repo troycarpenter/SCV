@@ -394,6 +394,10 @@ export default function SidebarNavFrame(props: SidebarNavFrameProps) {
               ettaPanelOpen={ettaPanelOpen}
               weddingDate={resolvedWeddingDate}
               weddingLocation={resolvedWeddingLocation}
+              workspaces={workspaces}
+              activeOrganizationId={workspace.organizationId}
+              onSwitchWorkspace={handleSwitchWorkspace}
+              isSwitchingWorkspace={isSwitchingWorkspace}
               onSignOut={handleSignOut}
               onToggleEttaPanel={onToggleEttaPanel}
               onNavClick={() => setIsOpen(false)}
