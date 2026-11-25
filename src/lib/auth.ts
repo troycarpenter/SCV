@@ -46,17 +46,18 @@ const staticTrustedOrigins = [
   new URL(appBaseUrl).origin,
 ]
 
-export function resolveTrustedOrigins(requestUrl?: string): string[] {
+export function resolveTrustedOrigins(request?: Request): string[] {
   const origins = new Set(staticTrustedOrigins)
+  const browserOrigin = request?.headers.get('origin')
 
-  if (requestUrl) {
+  if (browserOrigin) {
     try {
-      const requestOrigin = new URL(requestUrl)
-      if (localTrustedHostnames.has(requestOrigin.hostname)) {
-        origins.add(requestOrigin.origin)
+      const parsedOrigin = new URL(browserOrigin)
+      if (localTrustedHostnames.has(parsedOrigin.hostname)) {
+        origins.add(parsedOrigin.origin)
       }
     } catch {
-      // Ignore invalid request URLs; static trusted origins remain available.
+      // Ignore invalid origins; static trusted origins remain available.
     }
   }
 
@@ -140,7 +141,7 @@ export const authPlugins: BetterAuthPlugin[] = [
 export const auth = betterAuth({
   baseURL: appBaseUrl,
   secret: env.BETTER_AUTH_SECRET,
-  trustedOrigins: (request) => resolveTrustedOrigins(request?.url),
+  trustedOrigins: (request) => resolveTrustedOrigins(request),
   database: prismaAdapter(db, {
     provider: 'postgresql',
   }),
