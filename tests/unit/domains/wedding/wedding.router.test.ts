@@ -278,6 +278,21 @@ describe('weddingRouter', () => {
       const caller = makeAuthCaller('user-123', 'wedding-123', 'viewer')
       await expect(caller.getByUserId()).rejects.toMatchObject({ code: 'FORBIDDEN' })
     })
+
+    it('should require an active wedding', async () => {
+      const caller = makeAuthCaller('user-123', null)
+      await expect(caller.getByUserId()).rejects.toMatchObject({
+        code: 'PRECONDITION_FAILED',
+      })
+    })
+
+    it('should return the active wedding rather than the user primary wedding', async () => {
+      mockGetByIdFn.mockResolvedValue(mockWedding)
+      const caller = makeAuthCaller('user-123', 'active-wedding-456')
+
+      await expect(caller.getByUserId()).resolves.toEqual(mockWedding)
+      expect(mockGetByIdFn).toHaveBeenCalledWith('active-wedding-456')
+    })
   })
 
   describe('getWorkspace', () => {
