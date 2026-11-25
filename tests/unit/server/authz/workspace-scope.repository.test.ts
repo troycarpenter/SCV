@@ -67,9 +67,7 @@ describe('WorkspaceScopeRepository', () => {
   })
 
   it('getLastActiveOrganizationId returns the saved organization ID', async () => {
-    mockQueryRaw.mockResolvedValue([
-      { lastActiveOrganizationId: 'org-1' },
-    ])
+    mockQueryRaw.mockResolvedValue([{ lastActiveOrganizationId: 'org-1' }])
 
     const result = await repository.getLastActiveOrganizationId('user-1')
 

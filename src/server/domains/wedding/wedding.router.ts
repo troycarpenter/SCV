@@ -7,8 +7,11 @@
 
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+<<<<<<< HEAD
 
 import { formatCoupleFullNames } from '~/app/utils/helpers'
+=======
+>>>>>>> d3433f1 (style(workspaces): apply Biome formatting)
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
 import { listMyWorkspaces, switchWorkspace } from '~/server/application/workspace/workspace-scope'
 import { requireActiveWeddingId } from '~/server/authz/active-wedding'
