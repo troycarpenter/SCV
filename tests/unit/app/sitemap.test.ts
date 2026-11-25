@@ -1,6 +1,7 @@
 import sitemap from '~/app/sitemap'
 
 const mockGetAllPublishedSlugs = jest.fn()
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
 jest.mock('~/lib/blog/posts', () => ({
   getAllPublishedSlugs: () => mockGetAllPublishedSlugs(),
@@ -17,11 +18,11 @@ describe('sitemap route', () => {
 
     const urls = entries.map((entry) => entry.url)
 
-    expect(urls).toContain('http://localhost:3000/')
-    expect(urls).toContain('http://localhost:3000/blog')
-    expect(urls).toContain('http://localhost:3000/pricing')
-    expect(urls).toContain('http://localhost:3000/open-source')
-    expect(urls).toContain('http://localhost:3000/blog/introducing-oswp')
-    expect(urls).toContain('http://localhost:3000/blog/release-0-3-0')
+    expect(urls).toContain(`${siteUrl}/`)
+    expect(urls).toContain(`${siteUrl}/blog`)
+    expect(urls).toContain(`${siteUrl}/pricing`)
+    expect(urls).toContain(`${siteUrl}/open-source`)
+    expect(urls).toContain(`${siteUrl}/blog/introducing-oswp`)
+    expect(urls).toContain(`${siteUrl}/blog/release-0-3-0`)
   })
 })

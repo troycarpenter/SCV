@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react'
 
 import WebsitePage from '~/app/(authenicated)/website/page'
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
 const mockGetRequiredWedding = jest.fn()
 const mockGetWebsiteByUserId = jest.fn()
 const mockGetHomeSection = jest.fn()
@@ -181,7 +183,7 @@ describe('WebsitePage', () => {
     render(page)
 
     expect(mockWebsiteEditor).toHaveBeenCalledWith({
-      publicUrl: 'http://localhost:3000/w/existing-site',
+      publicUrl: `${siteUrl}/w/existing-site`,
       initialIntroText: '',
       initialHeadline: '',
       initialHeadlineAccent: '',
@@ -215,7 +217,7 @@ describe('WebsitePage', () => {
     render(page)
 
     expect(mockWebsiteEditor).toHaveBeenCalledWith({
-      publicUrl: 'http://localhost:3000/w/existing-site',
+      publicUrl: `${siteUrl}/w/existing-site`,
       initialIntroText: 'Welcome to our wedding weekend.',
       initialHeadline: 'Our Greatest\nAdventure\nBegins',
       initialHeadlineAccent: 'Here.',
