@@ -54,7 +54,7 @@ export default function WeddingChipCard(props: Readonly<WeddingChipCardProps>) {
             value={activeOrganizationId ?? ''}
             disabled={isSwitchingWorkspace}
             onChange={(event) => onSwitchWorkspace?.(event.target.value)}
-            className='w-full appearance-none rounded-md border border-sidebar-border bg-sidebar px-2.5 py-2 pr-8 text-sm text-sidebar-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring disabled:cursor-wait disabled:opacity-60'
+            className='w-full appearance-none rounded-md border border-sidebar-border bg-sidebar px-2.5 py-2 pr-8 text-sidebar-foreground text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring disabled:cursor-wait disabled:opacity-60'
           >
             {workspaces.map((workspace) => (
               <option key={workspace.organizationId} value={workspace.organizationId}>
