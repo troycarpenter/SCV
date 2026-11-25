@@ -30,7 +30,7 @@ type AnswerToQuestion = SubmitRsvpSchemaInput['answersToQuestions'][number]
 export class RsvpSubmissionService {
   constructor(
     private invitationRepo: InvitationRepository,
-    _questionRepo: QuestionRepository,
+    private questionRepo: QuestionRepository,
     private guestRepo: GuestRepository,
     private householdRepo: HouseholdRepository,
     private weddingRepo: WeddingRepository,
@@ -261,5 +261,38 @@ export class RsvpSubmissionService {
         })
       }
     }
+
+    // Questions and their options must belong to the same wedding as the
+    // guests/households submitting the answers. This check is shared by public
+    // and managed RSVP submissions.
+    await Promise.all(
+      data.answersToQuestions.map(async (answer) => {
+        const questionInScope = await this.questionRepo.belongsToWedding(
+          answer.questionId,
+          weddingId
+        )
+
+        if (!questionInScope) {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Invalid RSVP submission scope for token',
+          })
+        }
+
+        if (answer.questionType === 'Option') {
+          const optionInScope = await this.questionRepo.optionBelongsToQuestion(
+            answer.response,
+            answer.questionId
+          )
+
+          if (!optionInScope) {
+            throw new TRPCError({
+              code: 'FORBIDDEN',
+              message: 'Invalid RSVP submission scope for token',
+            })
+          }
+        }
+      })
+    )
   }
 }
