@@ -7,12 +7,8 @@
 
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
-
-import {
-  listMyWorkspaces,
-  switchWorkspace,
-} from '~/server/application/workspace/workspace-scope'
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
+import { listMyWorkspaces, switchWorkspace } from '~/server/application/workspace/workspace-scope'
 import { requireActiveWeddingId } from '~/server/authz/active-wedding'
 import { requirePermission } from '~/server/authz/permission-checker'
 import { readWorkspaceCapabilities } from '~/server/authz/workspace-capabilities'

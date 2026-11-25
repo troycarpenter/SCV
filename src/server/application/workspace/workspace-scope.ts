@@ -22,9 +22,7 @@ const getSessionToken = (session: unknown): string | null => {
   }
 
   const sessionToken = sessionRecord.token
-  return typeof sessionToken === 'string' && sessionToken.length > 0
-    ? sessionToken
-    : null
+  return typeof sessionToken === 'string' && sessionToken.length > 0 ? sessionToken : null
 }
 
 export const getSessionActiveOrganizationId = (session: unknown): string | null => {
