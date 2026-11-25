@@ -115,13 +115,7 @@ describe('SidebarNavFrame', () => {
       isSwitchingWorkspace: false,
     })
 
-    render(
-      <SidebarNavFrame
-        isOpen
-        setIsOpen={jest.fn()}
-        coupleName='Holly & Diego'
-      />
-    )
+    render(<SidebarNavFrame isOpen setIsOpen={jest.fn()} coupleName='Holly & Diego' />)
 
     const mobileDrawer = screen.getByRole('dialog', { name: 'Navigation menu' })
     const selector = within(mobileDrawer).getByRole('combobox', { name: 'Switch wedding' })
