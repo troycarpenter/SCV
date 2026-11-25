@@ -11,6 +11,7 @@ function makeContext(overrides: Partial<EttaContext> = {}): EttaContext {
       groomLastName: 'Smith',
       brideFirstName: 'Emily',
       brideLastName: 'Jones',
+      nameOrder: 'BRIDE_FIRST',
     },
     guestCount: 25,
     eventCount: 3,
@@ -24,11 +25,18 @@ function makeContext(overrides: Partial<EttaContext> = {}): EttaContext {
 // ── Planner prompt (couple) ─────────────────────────────────────────────────
 
 describe('buildSystemPrompt — couple (planner)', () => {
-  it('includes couple names', () => {
+  it('uses bride-first order by default', () => {
     const prompt = buildSystemPrompt(makeContext())
 
-    expect(prompt).toContain('Emily')
-    expect(prompt).toContain('James')
+    expect(prompt).toContain("for Emily & James's wedding")
+  })
+
+  it('uses groom-first order when configured', () => {
+    const prompt = buildSystemPrompt(
+      makeContext({ wedding: { ...makeContext().wedding, nameOrder: 'GROOM_FIRST' } })
+    )
+
+    expect(prompt).toContain("for James & Emily's wedding")
   })
 
   it('includes current counts', () => {
@@ -72,11 +80,21 @@ describe('buildSystemPrompt — couple (planner)', () => {
 // ── Concierge prompt (guest) ────────────────────────────────────────────────
 
 describe('buildSystemPrompt — guest (concierge)', () => {
-  it('includes couple names', () => {
+  it('uses bride-first order by default', () => {
     const prompt = buildSystemPrompt(makeContext({ actor: 'guest' }))
 
-    expect(prompt).toContain('Emily')
-    expect(prompt).toContain('James')
+    expect(prompt).toContain("for Emily & James's wedding")
+  })
+
+  it('uses groom-first order when configured', () => {
+    const prompt = buildSystemPrompt(
+      makeContext({
+        actor: 'guest',
+        wedding: { ...makeContext().wedding, nameOrder: 'GROOM_FIRST' },
+      })
+    )
+
+    expect(prompt).toContain("for James & Emily's wedding")
   })
 
   it('does NOT include action tiers', () => {

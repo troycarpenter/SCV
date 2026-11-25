@@ -55,6 +55,7 @@ export async function resolveEttaContext(params: {
       groomLastName: wedding.groomLastName,
       brideFirstName: wedding.brideFirstName,
       brideLastName: wedding.brideLastName,
+      nameOrder: wedding.nameOrder,
     },
     guestCount,
     eventCount,

@@ -53,6 +53,7 @@ function setupMocks(
           groomLastName: 'Smith',
           brideFirstName: 'Emily',
           brideLastName: 'Jones',
+          nameOrder: 'BRIDE_FIRST',
         }
   )
   mockGuestCount.mockResolvedValue(overrides.guestCount ?? 25)
@@ -89,6 +90,7 @@ describe('resolveEttaContext', () => {
         groomLastName: 'Smith',
         brideFirstName: 'Emily',
         brideLastName: 'Jones',
+        nameOrder: 'BRIDE_FIRST',
       },
       guestCount: 25,
       eventCount: 3,
