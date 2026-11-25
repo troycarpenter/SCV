@@ -18,11 +18,11 @@ describe('sitemap route', () => {
 
     const urls = entries.map((entry) => entry.url)
 
-    expect(urls).toContain(`${siteUrl}/`))
-    expect(urls).toContain(`${siteUrl}/blog`))
-    expect(urls).toContain(`${siteUrl}/pricing`))
-    expect(urls).toContain(`${siteUrl}/open-source`))
-    expect(urls).toContain(`${siteUrl}/blog/introducing-oswp`))
-    expect(urls).toContain(`${siteUrl}/blog/release-0-3-0`))
+    expect(urls).toContain(`${siteUrl}/`)
+    expect(urls).toContain(`${siteUrl}/blog`)
+    expect(urls).toContain(`${siteUrl}/pricing`)
+    expect(urls).toContain(`${siteUrl}/open-source`)
+    expect(urls).toContain(`${siteUrl}/blog/introducing-oswp`)
+    expect(urls).toContain(`${siteUrl}/blog/release-0-3-0`)
   })
 })
