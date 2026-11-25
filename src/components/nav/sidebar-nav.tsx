@@ -242,12 +242,7 @@ export default function SidebarNavFrame(props: SidebarNavFrameProps) {
   } = props
   const pathname = usePathname()
   const router = useRouter()
-  const {
-    workspace,
-    workspaces,
-    switchWorkspace,
-    isSwitchingWorkspace,
-  } = useWorkspace()
+  const { workspace, workspaces, switchWorkspace, isSwitchingWorkspace } = useWorkspace()
   const sidebarSections = getSidebarSections({
     role: workspace.role,
     capabilities: {
