@@ -78,6 +78,7 @@ describe('VendorRepository enrichment helpers', () => {
   const mockVendorImageCreateMany = jest.fn()
   const mockVendorImageFindMany = jest.fn()
   const mockVendorImageDelete = jest.fn()
+  const mockVendorImageFindFirst = jest.fn()
   const mockVendorImageUpdateMany = jest.fn()
   const mockVendorImageUpdate = jest.fn()
 
@@ -95,6 +96,7 @@ describe('VendorRepository enrichment helpers', () => {
       createMany: mockVendorImageCreateMany,
       findMany: mockVendorImageFindMany,
       delete: mockVendorImageDelete,
+      findFirst: mockVendorImageFindFirst,
       updateMany: mockVendorImageUpdateMany,
       update: mockVendorImageUpdate,
     },
@@ -309,6 +311,28 @@ describe('VendorRepository image operations', () => {
         where: { vendorId: 'vendor-123' },
         orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
       })
+    })
+  })
+
+  describe('imageBelongsToVendor', () => {
+    it('checks image and vendor IDs together', async () => {
+      mockVendorImageFindFirst.mockResolvedValue({ id: 'image-123' })
+
+      const result = await repository.imageBelongsToVendor('image-123', 'vendor-123')
+
+      expect(result).toBe(true)
+      expect(mockVendorImageFindFirst).toHaveBeenCalledWith({
+        where: { id: 'image-123', vendorId: 'vendor-123' },
+        select: { id: true },
+      })
+    })
+
+    it('returns false when the image belongs to another vendor', async () => {
+      mockVendorImageFindFirst.mockResolvedValue(null)
+
+      const result = await repository.imageBelongsToVendor('image-123', 'vendor-456')
+
+      expect(result).toBe(false)
     })
   })
 
