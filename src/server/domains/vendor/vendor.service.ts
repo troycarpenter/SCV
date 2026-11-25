@@ -437,6 +437,7 @@ export class VendorService {
   ): Promise<string> {
     this.requireVendorPermission(ctx, 'update')
     await this.assertVendorOwnership(vendorId, weddingId)
+    await this.assertImageOwnership(imageId, vendorId)
 
     const deleted = await this.vendorRepository.deleteImage(imageId)
     await this.deleteBlobsBestEffort([deleted.url])
@@ -454,6 +455,7 @@ export class VendorService {
   ): Promise<VendorImage> {
     this.requireVendorPermission(ctx, 'update')
     await this.assertVendorOwnership(vendorId, weddingId)
+    await this.assertImageOwnership(imageId, vendorId)
     return this.vendorRepository.setCoverImage(vendorId, imageId)
   }
 
@@ -514,6 +516,16 @@ export class VendorService {
       throw new TRPCError({
         code: 'FORBIDDEN',
         message: 'You do not have permission to modify this quote',
+      })
+    }
+  }
+
+  private async assertImageOwnership(imageId: string, vendorId: string): Promise<void> {
+    const belongs = await this.vendorRepository.imageBelongsToVendor(imageId, vendorId)
+    if (!belongs) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You do not have permission to modify this vendor image',
       })
     }
   }
