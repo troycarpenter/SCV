@@ -37,6 +37,7 @@ import {
   mockDeleteAnswer,
   mockDeleteOptionResponse,
   mockFindOptionResponse,
+  mockBelongsToWedding,
   mockOptionBelongsToQuestion,
   mockUpsertAnswer,
   mockUpsertOptionResponse,
