@@ -368,6 +368,17 @@ export class VendorRepository {
   }
 
   /**
+   * Check if an image belongs to a vendor
+   */
+  async imageBelongsToVendor(imageId: string, vendorId: string): Promise<boolean> {
+    const image = await this.db.vendorImage.findFirst({
+      where: { id: imageId, vendorId },
+      select: { id: true },
+    })
+    return image !== null
+  }
+
+  /**
    * Delete a single image record and return it (caller uses the key for blob cleanup)
    */
   async deleteImage(imageId: string): Promise<VendorImage> {
