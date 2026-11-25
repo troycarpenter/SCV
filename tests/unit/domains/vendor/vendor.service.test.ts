@@ -38,6 +38,7 @@ import {
   mockFindCategoryConfig,
   mockFindCustomFieldsById,
   mockFindNotesByVendorId,
+  mockImageBelongsToVendor,
   mockQuote,
   mockQuoteBelongsToVendor,
   mockQuoteFile,
@@ -87,6 +88,7 @@ const mockDel = del as jest.Mock
 const mockSaveImagesFn = mockSaveImages as jest.Mock
 const mockDeleteImageFn = mockDeleteImage as jest.Mock
 const mockSetCoverImageFn = mockSetCoverImage as jest.Mock
+const mockImageBelongsToVendorFn = mockImageBelongsToVendor as jest.Mock
 const mockFetchWebsiteImages = fetchWebsiteImages as jest.Mock
 
 describe('VendorService', () => {
@@ -1003,6 +1005,7 @@ describe('VendorService', () => {
     describe('deleteImage', () => {
       it('should delete image and clean up blob', async () => {
         mockBelongsToWeddingFn.mockResolvedValue(true)
+        mockImageBelongsToVendorFn.mockResolvedValue(true)
         mockDeleteImageFn.mockResolvedValue(mockVendorImage)
 
         const result = await vendorService.deleteImage(
@@ -1024,12 +1027,25 @@ describe('VendorService', () => {
           vendorService.deleteImage(actorContext, 'vendor-123', 'other-wedding', 'image-123')
         ).rejects.toMatchObject({ code: 'FORBIDDEN' })
       })
+
+      it('should reject an image that belongs to another vendor', async () => {
+        mockBelongsToWeddingFn.mockResolvedValue(true)
+        mockImageBelongsToVendorFn.mockResolvedValue(false)
+
+        await expect(
+          vendorService.deleteImage(actorContext, 'vendor-123', 'wedding-123', 'foreign-image')
+        ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+
+        expect(mockDeleteImageFn).not.toHaveBeenCalled()
+        expect(mockDel).not.toHaveBeenCalled()
+      })
     })
 
     describe('setCoverImage', () => {
       it('should set cover image for vendor the couple owns', async () => {
         const updatedImage = { ...mockVendorImage, isPrimary: true }
         mockBelongsToWeddingFn.mockResolvedValue(true)
+        mockImageBelongsToVendorFn.mockResolvedValue(true)
         mockSetCoverImageFn.mockResolvedValue(updatedImage)
 
         const result = await vendorService.setCoverImage(
@@ -1049,6 +1065,17 @@ describe('VendorService', () => {
         await expect(
           vendorService.setCoverImage(actorContext, 'vendor-123', 'other-wedding', 'image-123')
         ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+      })
+
+      it('should reject an image that belongs to another vendor', async () => {
+        mockBelongsToWeddingFn.mockResolvedValue(true)
+        mockImageBelongsToVendorFn.mockResolvedValue(false)
+
+        await expect(
+          vendorService.setCoverImage(actorContext, 'vendor-123', 'wedding-123', 'foreign-image')
+        ).rejects.toMatchObject({ code: 'FORBIDDEN' })
+
+        expect(mockSetCoverImageFn).not.toHaveBeenCalled()
       })
     })
 
