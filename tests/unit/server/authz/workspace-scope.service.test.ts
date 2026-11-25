@@ -59,6 +59,35 @@ describe('WorkspaceScopeService', () => {
     })
   })
 
+  it('keeps this session active when another session has a different saved preference', async () => {
+    const repository = makeRepository()
+    repository.getLastActiveOrganizationId.mockResolvedValue('org-other-session')
+    repository.findScopeForOrganization.mockResolvedValue({
+      organizationId: 'org-current-session',
+      isPrimaryWedding: false,
+      role: 'admin',
+      weddingId: 'wedding-current-session',
+    } satisfies WorkspaceScopeRow)
+
+    const service = new WorkspaceScopeService(repository)
+
+    const result = await service.resolve({
+      userId: 'user-1',
+      sessionToken: 'tok-current-session',
+      sessionActiveOrganizationId: 'org-current-session',
+    })
+
+    expect(repository.setActiveOrganizationId).not.toHaveBeenCalled()
+    expect(repository.setLastActiveOrganizationId).toHaveBeenCalledWith(
+      'user-1',
+      'org-current-session'
+    )
+    expect(result).toEqual({
+      activeOrganization: { organizationId: 'org-current-session', role: 'admin' },
+      activeWeddingId: 'wedding-current-session',
+    })
+  })
+
   it('does not rewrite the saved preference when it already matches the valid session', async () => {
     const repository = makeRepository()
     repository.getLastActiveOrganizationId.mockResolvedValue('org-1')

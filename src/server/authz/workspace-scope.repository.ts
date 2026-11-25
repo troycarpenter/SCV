@@ -12,6 +12,14 @@ import type { OrganizationRole } from '~/server/authz/wedding-organization'
 import type { WorkspaceScopeRow } from '~/server/authz/workspace-scope-resolver'
 import { db } from '~/server/db'
 
+export type WorkspaceChoiceRow = WorkspaceScopeRow & {
+  groomFirstName: string
+  groomLastName: string
+  brideFirstName: string
+  brideLastName: string
+}
+
+
 /** A wedding created before workspaces existed, with everyone linked to it. */
 export type OrganizationlessWedding = {
   weddingId: string
