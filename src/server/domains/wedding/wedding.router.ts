@@ -114,11 +114,16 @@ export const weddingRouter = createTRPCRouter({
     }),
 
   /**
-   * Get wedding for current user
+   * Get wedding for current user (legacy endpoint; resolves the active workspace).
    */
   getByUserId: protectedProcedure.query(async ({ ctx }) => {
     requirePermission(ctx.authz, { wedding: ['read'] })
-    return weddingService.getByUserId(ctx.auth.userId)
+    const weddingId = requireActiveWeddingId(ctx.auth.activeWeddingId)
+    const wedding = await weddingService.getById(weddingId)
+    if (!wedding) {
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Wedding not found' })
+    }
+    return wedding
   }),
 
   /**
