@@ -42,6 +42,7 @@ export default async function SettingsPage() {
           <div className='space-y-6'>
             {details ? (
               <WeddingSettingsForm
+                key={wedding.id}
                 initialData={{
                   groomFirstName: details.groomFirstName,
                   groomLastName: details.groomLastName,
