@@ -39,6 +39,9 @@ export default async () => {
     'superjson',
     '@react-email',
     'jose',
+    // Better Auth's access-control plugin is ESM and imports its scoped packages.
+    'better-auth',
+    '@better-auth',
     'react-phone-number-input',
     'libphonenumber-js',
     'posthog-node',
