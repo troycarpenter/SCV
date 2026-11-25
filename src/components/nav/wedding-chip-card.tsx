@@ -1,6 +1,7 @@
 'use client'
 
 import { ChevronDown } from 'lucide-react'
+import { useId } from 'react'
 
 type WorkspaceChoice = {
   organizationId: string
@@ -28,6 +29,7 @@ export default function WeddingChipCard(props: Readonly<WeddingChipCardProps>) {
     onSwitchWorkspace,
     isSwitchingWorkspace = false,
   } = props
+  const workspaceSelectorId = useId()
 
   const hasMultipleWorkspaces = workspaces.length > 1
 
@@ -44,11 +46,11 @@ export default function WeddingChipCard(props: Readonly<WeddingChipCardProps>) {
 
       {hasMultipleWorkspaces && (
         <div className='relative mt-3 border-sidebar-border border-t pt-3'>
-          <label htmlFor='wedding-workspace-selector' className='mb-1 block text-muted-foreground text-xs'>
+          <label htmlFor={workspaceSelectorId} className='mb-1 block text-muted-foreground text-xs'>
             Switch wedding
           </label>
           <select
-            id='wedding-workspace-selector'
+            id={workspaceSelectorId}
             value={activeOrganizationId ?? ''}
             disabled={isSwitchingWorkspace}
             onChange={(event) => onSwitchWorkspace?.(event.target.value)}
