@@ -78,7 +78,6 @@ describe('VendorRepository enrichment helpers', () => {
   const mockVendorImageCreateMany = jest.fn()
   const mockVendorImageFindMany = jest.fn()
   const mockVendorImageDelete = jest.fn()
-  const mockVendorImageFindFirst = jest.fn()
   const mockVendorImageUpdateMany = jest.fn()
   const mockVendorImageUpdate = jest.fn()
 
@@ -96,7 +95,6 @@ describe('VendorRepository enrichment helpers', () => {
       createMany: mockVendorImageCreateMany,
       findMany: mockVendorImageFindMany,
       delete: mockVendorImageDelete,
-      findFirst: mockVendorImageFindFirst,
       updateMany: mockVendorImageUpdateMany,
       update: mockVendorImageUpdate,
     },
@@ -199,6 +197,7 @@ describe('VendorRepository image operations', () => {
   const mockVendorImageCreateMany = jest.fn()
   const mockVendorImageFindMany = jest.fn()
   const mockVendorImageDelete = jest.fn()
+  const mockVendorImageFindFirst = jest.fn()
   const mockVendorImageUpdateMany = jest.fn()
   const mockVendorImageUpdate = jest.fn()
   const mockTransactionFn = jest.fn()
@@ -208,6 +207,7 @@ describe('VendorRepository image operations', () => {
       createMany: mockVendorImageCreateMany,
       findMany: mockVendorImageFindMany,
       delete: mockVendorImageDelete,
+      findFirst: mockVendorImageFindFirst,
       updateMany: mockVendorImageUpdateMany,
       update: mockVendorImageUpdate,
     },
