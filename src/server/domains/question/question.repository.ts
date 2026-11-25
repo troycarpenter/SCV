@@ -197,6 +197,15 @@ export class QuestionRepository {
     return question !== null
   }
 
+  async optionBelongsToQuestion(optionId: string, questionId: string): Promise<boolean> {
+    const option = await this.db.option.findFirst({
+      where: { id: optionId, questionId },
+      select: { id: true },
+    })
+
+    return option !== null
+  }
+
   async eventBelongsToWedding(eventId: string, weddingId: string): Promise<boolean> {
     const event = await this.db.event.findFirst({
       where: { id: eventId, weddingId },
